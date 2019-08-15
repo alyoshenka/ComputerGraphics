@@ -4,15 +4,8 @@ using UnityEngine;
 
 public class CodePentagon : CustomMesh
 {
-    public Texture texture;
-    public Material material;
-
     void Start()
     {
-        // assign texture
-        material.SetTexture("_Albedo", texture);
-        GetComponent<MeshRenderer>().material = material;
-
         Mesh mesh = new Mesh();
 
         // locations
@@ -60,7 +53,7 @@ public class CodePentagon : CustomMesh
         mesh.normals = norms;
 
         // how textures are mapped to surface
-        Vector2[] UVs = new Vector2[7];
+        Vector2[] UVs = new Vector2[verts.Length];
         UVs[0] = new Vector2(0.25f, 0);
         UVs[1] = new Vector2(0, 0.75f);
         UVs[2] = new Vector2(0.5f, 1);

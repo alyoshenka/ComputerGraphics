@@ -4,10 +4,15 @@ using UnityEngine;
 
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
-public class CustomMesh : MonoBehaviour {
+public class CustomMesh : MonoBehaviour
+{
 
     protected Mesh customMesh; // store so it can be destroyed
     protected Vector3[] verts = new Vector3[0];
+
+    protected int[] indices;
+    protected Vector3[] norms;
+    protected Vector2[] UVs;
 
     void OnDestroy()
     {
