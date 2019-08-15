@@ -8,7 +8,7 @@ public class CodeTriangle : CustomMesh {
         Mesh mesh = new Mesh();
 
         // locations
-        verts = new Vector3[3];
+        Vector3[] verts = new Vector3[3];
         verts[0] = new Vector3(0, 0, 0);
         verts[1] = new Vector3(0, 1, 0);
         verts[2] = new Vector3(1, 0, 0);

@@ -9,7 +9,7 @@ public class CodePentagon : CustomMesh
         Mesh mesh = new Mesh();
 
         // locations
-        verts = new Vector3[7];
+        Vector3[] verts = new Vector3[7];
         verts[0] = new Vector3(1, 0, 0);
         verts[1] = new Vector3(0, 3, 0);
         verts[2] = new Vector3(2, 4, 0);

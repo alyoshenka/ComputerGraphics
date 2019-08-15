@@ -5,53 +5,51 @@ using UnityEngine;
 public class CodeCube : CustomMesh {
 
     Vector3[] norms;
-    Vector3[] verts;
-    Vector2[] UVs;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         Mesh mesh = new Mesh();
 
-        verts = new Vector3[8];
-        verts[0] = new Vector3(0, 0, 0);
-        verts[1] = new Vector3(0, 0, 1);
-        verts[2] = new Vector3(1, 0, 1);
-        verts[3] = new Vector3(1, 0, 0);
-        verts[4] = new Vector3(0, 1, 0);
-        verts[5] = new Vector3(0, 1, 1);
-        verts[6] = new Vector3(1, 1, 1);
-        verts[7] = new Vector3(1, 1, 0);
+        corners = new Vector3[8];
+        corners[0] = new Vector3(0, 0, 0);
+        corners[1] = new Vector3(0, 0, 1);
+        corners[2] = new Vector3(1, 0, 1);
+        corners[3] = new Vector3(1, 0, 0);
+        corners[4] = new Vector3(0, 1, 0);
+        corners[5] = new Vector3(0, 1, 1);
+        corners[6] = new Vector3(1, 1, 1);
+        corners[7] = new Vector3(1, 1, 0);
 
-        verts = new Vector3[24];
-        verts[0] = verts[4]; // t
-        verts[1] = verts[5];
-        verts[2] = verts[6];
-        verts[3] = verts[7];
+        Vector3[] verts = new Vector3[24];
+        verts[0] = corners[4]; // t
+        verts[1] = corners[5];
+        verts[2] = corners[6];
+        verts[3] = corners[7];
 
-        verts[4] = verts[0]; // bo
-        verts[5] = verts[1];
-        verts[6] = verts[2]; 
-        verts[7] = verts[3];
+        verts[4] = corners[0]; // bo
+        verts[5] = corners[1];
+        verts[6] = corners[2]; 
+        verts[7] = corners[3];
 
-        verts[8] = verts[0]; // l
-        verts[9] = verts[1];
-        verts[10] = verts[5];
-        verts[11] = verts[4];
+        verts[8] = corners[0]; // l
+        verts[9] = corners[1];
+        verts[10] = corners[5];
+        verts[11] = corners[4];
 
-        verts[12] = verts[3]; // r
-        verts[13] = verts[7];
-        verts[14] = verts[6];
-        verts[15] = verts[2];
+        verts[12] = corners[3]; // r
+        verts[13] = corners[7];
+        verts[14] = corners[6];
+        verts[15] = corners[2];
 
-        verts[16] = verts[0]; // f
-        verts[17] = verts[4];
-        verts[18] = verts[7];
-        verts[19] = verts[3];
+        verts[16] = corners[0]; // f
+        verts[17] = corners[4];
+        verts[18] = corners[7];
+        verts[19] = corners[3];
 
-        verts[20] = verts[1]; // ba
-        verts[21] = verts[5];
-        verts[22] = verts[6];
-        verts[23] = verts[2];
+        verts[20] = corners[1]; // ba
+        verts[21] = corners[5];
+        verts[22] = corners[6];
+        verts[23] = corners[2];
         mesh.vertices = verts;
 
         int[] indices = new int[36];
@@ -113,7 +111,7 @@ public class CodeCube : CustomMesh {
         SetNormals(20, 23, Vector3.forward);
         mesh.normals = norms;
 
-        UVs = new Vector2[verts.Length];
+        Vector2[] UVs = new Vector2[24];
         UVs[0] = UVs[5] = UVs[9]  = UVs[12] = UVs[16] = UVs[23] = new Vector2(0, 0);
         UVs[2] = UVs[7] = UVs[11] = UVs[14] = UVs[18] = UVs[21] = new Vector2(1, 1);
         UVs[1] = UVs[4] = UVs[10] = UVs[13] = UVs[17] = UVs[22] = new Vector2(0, 1);
@@ -136,7 +134,10 @@ public class CodeCube : CustomMesh {
     protected new void OnDrawGizmos()
     {
         Gizmos.color = new Color(153, 0, 204, 1);
-        base.OnDrawGizmos();
+        foreach (Vector3 v in corners)
+        {
+            Gizmos.DrawSphere(transform.position + v, 0.1f);
+        }
 
         //for(int i = 0; i < verts.Length; i++){
         //    Gizmos.DrawLine(transform.position + verts[i], transform.position + verts[i] + norms[i]);

@@ -8,11 +8,7 @@ public class CustomMesh : MonoBehaviour
 {
 
     protected Mesh customMesh; // store so it can be destroyed
-    protected Vector3[] verts = new Vector3[0];
-
-    protected int[] indices;
-    protected Vector3[] norms;
-    protected Vector2[] UVs;
+    protected Vector3[] corners = new Vector3[0];
 
     void OnDestroy()
     {
@@ -25,7 +21,7 @@ public class CustomMesh : MonoBehaviour
 
     protected void OnDrawGizmos()
     {
-        foreach (Vector3 v in verts)
+        foreach (Vector3 v in corners)
         {
             Gizmos.DrawSphere(transform.position + v, 0.1f);
         }
