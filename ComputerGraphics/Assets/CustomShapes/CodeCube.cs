@@ -5,6 +5,7 @@ using UnityEngine;
 public class CodeCube : CustomMesh {
 
     Vector3[] norms;
+    Vector2[] UVs;
 
     // Use this for initialization
     void Start () {
@@ -111,7 +112,7 @@ public class CodeCube : CustomMesh {
         SetNormals(20, 23, Vector3.forward);
         mesh.normals = norms;
 
-        Vector2[] UVs = new Vector2[24];
+        UVs = new Vector2[24];
         UVs[0] = UVs[5] = UVs[9]  = UVs[12] = UVs[16] = UVs[23] = new Vector2(0, 0);
         UVs[2] = UVs[7] = UVs[11] = UVs[14] = UVs[18] = UVs[21] = new Vector2(1, 1);
         UVs[1] = UVs[4] = UVs[10] = UVs[13] = UVs[17] = UVs[22] = new Vector2(0, 1);
@@ -125,7 +126,7 @@ public class CodeCube : CustomMesh {
 
     void SetNormals(int start, int end, Vector3 normal)
     {
-        for(int i = start; i < end; i++)
+        for(int i = start; i <= end; i++)
         {
             norms[i] = normal;
         }
