@@ -10,6 +10,7 @@ public class CustomNGon : CustomMesh
 
     Vector3[] verts;
     int[] indices;
+    Vector2[] UVs;
 
     // Start is called before the first frame update
     void Start()
@@ -53,12 +54,12 @@ public class CustomNGon : CustomMesh
         }
         mesh.normals = norms;
 
-        Vector2[] UVs = new Vector2[verts.Length];
+        UVs = new Vector2[verts.Length];
         UVs[0] = new Vector2(0.5f, 0.5f);
         for (i = 0; i < UVs.Length; i++)
         {
             float angle = Mathf.Deg2Rad * (360f / sides) * i;
-            verts[i] = new Vector2(0.5f + Mathf.Cos(angle) / 2, 0.5f + Mathf.Sin(angle) / 2);
+            UVs[i] = new Vector2(0.5f - Mathf.Cos(angle) / 2f, 0.5f + Mathf.Sin(angle) / 2f);
         }
         mesh.uv = UVs;
 
