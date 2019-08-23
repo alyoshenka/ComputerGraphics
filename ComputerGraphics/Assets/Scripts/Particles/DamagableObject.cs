@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class DamagableObject : MonoBehaviour
 {
+    public float rechargeTime = 2;
+
     Material mat;
 
     private void Start()
@@ -14,5 +16,12 @@ public class DamagableObject : MonoBehaviour
     public void TakeDamage()
     {
         mat.color = Color.red;
+        StartCoroutine("Recharge");
+    }
+
+    IEnumerator Recharge()
+    {
+        yield return new WaitForSeconds(rechargeTime);
+        mat.color = Color.white;
     }
 }
