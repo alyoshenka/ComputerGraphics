@@ -2,4 +2,4 @@
 
 #include <iostream>
 
-std::string loadShader(const char* fileName);
+std::string load(std::string fileName);

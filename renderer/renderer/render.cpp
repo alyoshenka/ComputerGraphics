@@ -1,4 +1,7 @@
 #include "render.h"
+#include "glm/gtc/type_ptr.hpp"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stbimage/stb_image.h"
 
 #include <iostream>
 
@@ -26,7 +29,9 @@ geometry makeGeometry(vertex* verts, size_t vertCount, unsigned* indices, size_t
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)0); // position[0] = [4] [floats] for [vertex] at [(void*)0] offset (needs to be normalized = [false])
 	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)16); 
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)sizeof(vertex::pos));
+	glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(sizeof(vertex::pos) + sizeof(vertex::color))); 
 
 	// unbind buffers (in a SPECIFIC order)
 	glBindVertexArray(0); // first
@@ -124,5 +129,89 @@ void GLAPIENTRY MessageCallback(
 	std::cout << "Length: " << length << std::endl;
 	std::cout << "Message: " << message << std::endl;
 	std::cout << "userParam: " << userParam << std::endl;
+}
+
+void setUniform(const shader &shad, GLuint location, const glm::mat4 &value)
+{
+	glProgramUniformMatrix4fv(shad.program, location, 1, GL_FALSE, glm::value_ptr(value));
+}
+
+void setUniform(const shader & shad, GLuint location, const texture & value, int textureSlot)
+{
+	// specify the texture slot we're working with
+	glActiveTexture(GL_TEXTURE0 + textureSlot);
+
+	// bind the texture to that slot
+	glBindTexture(GL_TEXTURE_2D, value.handle);
+
+	// assign the uniform to the shader
+	glProgramUniform1i(shad.program, location, textureSlot);
+}
+
+texture makeTexture(unsigned width, unsigned height, unsigned channels, const unsigned char *pixels)
+{
+	GLenum oglFormat = GL_RGBA; 
+	switch (channels)
+	{
+	case 1: 
+		oglFormat = GL_RED;
+		break;
+	case 2:
+		oglFormat = GL_RG;
+		break;
+	case 3:
+		oglFormat = GL_RGB;
+		break;
+	case 4:
+		oglFormat = GL_RGBA;
+		break;
+	default:
+		// ToDo: error handling
+		break;
+	}
+
+	texture tex = { 0, width, height, channels };
+
+	// generate and bind texture
+	glGenTextures(1, &tex.handle);
+	glBindTexture(GL_TEXTURE_2D, tex.handle);
+
+	// buffer/send actual data
+	glTexImage2D(GL_TEXTURE_2D, 0, oglFormat, width, height, 0, oglFormat, GL_UNSIGNED_BYTE, pixels); 
+
+	// describe how the texture will be used
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// unbind
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	return tex;
+}
+
+void freeTexture(texture & tex)
+{
+	glDeleteTextures(1, &tex.handle);
+	tex = {};
+}
+
+texture loadTexture(const char * imagePath)
+{
+	int imageWidth, imageHeight, imageFormat;
+	unsigned char *rawPixelData = nullptr;
+
+	// tell stb image to load the image
+	stbi_set_flip_vertically_on_load(true);
+	rawPixelData = stbi_load(imagePath, &imageWidth, &imageHeight, &imageFormat, STBI_default);
+
+	// ToDO: ensure rawPixelData is NOT NULL, if null -> image failed to load
+
+	// pass the data to make the texture
+	texture tex = makeTexture(imageWidth, imageHeight, imageFormat, rawPixelData);
+
+	// free the image
+	stbi_image_free(rawPixelData);
+
+	return tex;
 }
 

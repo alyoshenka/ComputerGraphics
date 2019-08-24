@@ -7,7 +7,7 @@
 using std::ifstream;
 using std::ios_base;
 
-std::string loadShader(const char* fileName)
+std::string load(std::string fileName)
 {
 	ifstream fileIn;
 	fileIn.open(fileName, ios_base::in);
@@ -22,3 +22,4 @@ std::string loadShader(const char* fileName)
 	fileIn.close();
 	return ret;
 }
+

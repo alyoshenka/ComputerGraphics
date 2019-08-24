@@ -5,6 +5,7 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 unity-chan!/
+tiny_obj_loader.h
 
 # Visual Studio cache directory
 .vs/

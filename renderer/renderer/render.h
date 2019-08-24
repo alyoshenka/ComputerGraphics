@@ -7,6 +7,7 @@ struct vertex
 {
 	glm::vec4 pos;
 	glm::vec4 color;
+	glm::vec2 uv;
 };
 
 struct geometry
@@ -18,6 +19,12 @@ struct geometry
 struct shader
 {
 	GLuint program;
+};
+
+struct texture
+{
+	GLuint handle;
+	unsigned width, height, channels;
 };
 
 geometry makeGeometry(vertex* verts, size_t vertCount, unsigned* indices, size_t indexCount);
@@ -39,4 +46,14 @@ void GLAPIENTRY MessageCallback(GLenum source,
 	GLsizei length,
 	const GLchar* message,
 	const void* userParam);
+
+void setUniform(const shader &shad, GLuint location, const glm::mat4 &value);
+
+void setUniform(const shader& shad, GLuint location, const texture &value, int textureSlot);
+
+texture makeTexture(unsigned width, unsigned height, unsigned channels, const unsigned char * pixels);
+
+void freeTexture(texture &tex);
+
+texture loadTexture(const char *imagePath);
 
