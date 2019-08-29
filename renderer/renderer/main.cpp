@@ -14,7 +14,6 @@
 
 int main() 
 {
-	// loadObj("Geometry/tri.obj");
 
 	timeclock t;
 
@@ -52,6 +51,7 @@ int main()
 	// geometry quad = makeGeometry(quadVerts, 4, quadIndices, 6);
 	// geometry customQuad = makePlane(1.5f, 0.8f);
 	// geometry obj = loadObj("Geometry/tri.obj");
+	geometry cust = loadObj("Geometry/cube.obj");
 
 	shader basicShad = makeShader(load("Shaders/basicVert.txt").c_str(), load("Shaders/basicFrag.txt").c_str());
 	shader colorShad = makeShader(load("Shaders/colorVert.txt").c_str(), load("Shaders/colorFrag.txt").c_str());
@@ -68,7 +68,7 @@ int main()
 	texture tex3 = loadTexture("Assets/splat.png");
 
 	light sun;
-	sun.dir = glm::vec4{ -1, 0, 0, 1 };
+	sun.dir = glm::vec4{ 0, 0, 1, 1 };
 	sun.col = glm::vec4{ 1, 1, 0, 1 };
 
 	setUniform(camShad, 0, tex, 0);
@@ -90,9 +90,7 @@ int main()
 	float scaleCurrent = 0.995;
 
 	float lerp = 0;
-	float dir = 0.01f;
-
-	
+	float dir = 0.01f;	
 
 	while (!game.shouldClose())
 	{
@@ -106,7 +104,7 @@ int main()
 		// triModel = glm::translate(triModel, glm::vec3(cos(angle) / 20, sin(angle) / 20, 0));
 		// angle += 0.1f;
 
-		triModel = glm::rotate(triModel, glm::radians(1.f), glm::vec3(0, 1, 0));
+		triModel = glm::rotate(triModel, glm::radians(5.f), glm::vec3(0, 1, 0));
 
 		/*triModel = glm::scale(triModel, glm::vec3(scaleCurrent, 1, 1));
 		scaleCount++;
@@ -126,8 +124,8 @@ int main()
 		/*
 		setUniform(camShad, 0, camProj);
 		setUniform(camShad, 1, camView);
-		setUniform(camShad, 2, triModel);
 		*/
+		// setUniform(camShad, 2, triModel);
 
 		/*
 		setUniform(lightShad, 0, camProj);
@@ -140,7 +138,8 @@ int main()
 		 // draw(lightShad, triangle);
 		 // draw(basicShad, customQuad);
 
-		draw(lightShad, triangle);
+		// draw(lightShad, triangle);
+		draw(lightShad, cust);
 
 		// assert(glGetError() == GL_NO_ERROR);
 

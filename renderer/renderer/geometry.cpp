@@ -7,6 +7,11 @@
 
 geometry loadObj(const char * fileName) // NOT DONE
 {
+	std::vector<vertex> verts;
+	std::vector<unsigned> indices;
+	size_t vertCount;
+	size_t indexCount;
+
 	tinyobj::attrib_t attrib;
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
@@ -16,54 +21,69 @@ geometry loadObj(const char * fileName) // NOT DONE
 
 	tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, fileName);
 
-	vertex* verts = nullptr;
-	size_t vertCount = 0;
-	unsigned* indices = nullptr;
-	size_t indexCount = 0;
+	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, fileName);
 
-	// get vert count
-	vertCount = attrib.vertices.size() / 3; // triangles
-
-	// pass in verts
-	verts = new vertex[vertCount];
-	vertex cur;
-	int posIdx = 0;
-	int normIdx = 0;
-	int uvIdx = 0;
-	int colIdx = 0;
-
-	for (int i = 0; i < vertCount; i++)
+	if (!warn.empty())
 	{
-		cur = verts[i];
-
-		cur.pos.x = attrib.vertices[posIdx++];
-		cur.norm.x = attrib.normals[normIdx++];
-		cur.uv.x = attrib.texcoords[uvIdx++];
-		cur.col.r = attrib.colors[colIdx++];
-
-		cur.pos.y = attrib.vertices[posIdx++];
-		cur.norm.y = attrib.normals[normIdx++];
-		cur.uv.y = attrib.texcoords[uvIdx++];
-		cur.col.g = attrib.colors[colIdx++];
-
-		cur.pos.z = attrib.vertices[posIdx++];
-		cur.norm.z = attrib.normals[normIdx++];
-		cur.col.b = attrib.colors[colIdx++];
-
-		verts[i] = cur;
+		std::cout << warn << std::endl;
 	}
 
-	// get index count
-	indexCount = shapes.size();
-
-	// pass in indices
-	indices = new unsigned[indexCount];
-	for (int i = 0; i < indexCount; i++)
+	if (!err.empty())
 	{
-		indices[i] = shapes[0].mesh.indices[i].vertex_index;
+		std::cerr << err << std::endl;
 	}
 
-	return makeGeometry(verts, vertCount, indices, indexCount);
+	if (!ret)
+	{
+		exit(1);
+	}
+
+	// Loop over shapes
+	for (size_t s = 0; s < shapes.size(); s++)
+	{
+		// Loop over faces(polygon)
+		size_t index_offset = 0;
+		for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++)
+		{
+			int fv = shapes[s].mesh.num_face_vertices[f];
+
+			// Loop over vertices in the face.
+			for (size_t v = 0; v < fv; v++)
+			{
+				// access to vertex
+				tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
+				tinyobj::real_t vx = attrib.vertices[3 * idx.vertex_index + 0];
+				tinyobj::real_t vy = attrib.vertices[3 * idx.vertex_index + 1];
+				tinyobj::real_t vz = attrib.vertices[3 * idx.vertex_index + 2];
+				tinyobj::real_t nx = attrib.normals[3 * idx.normal_index + 0];
+				tinyobj::real_t ny = attrib.normals[3 * idx.normal_index + 1];
+				tinyobj::real_t nz = attrib.normals[3 * idx.normal_index + 2];
+				tinyobj::real_t tx = attrib.texcoords[2 * idx.texcoord_index + 0];
+				tinyobj::real_t ty = attrib.texcoords[2 * idx.texcoord_index + 1];
+				// Optional: vertex colors
+				tinyobj::real_t red = attrib.colors[3*idx.vertex_index+0];
+				tinyobj::real_t green = attrib.colors[3*idx.vertex_index+1];
+				tinyobj::real_t blue = attrib.colors[3*idx.vertex_index+2];
+
+				vertex vert;
+				vert.pos = { vx, vy, vz, 1};
+				vert.norm = { nx, ny, nz, 1};
+				vert.col = { red, green, blue, 1};
+				vert.uv = { tx, ty };
+				verts.push_back(vert);
+				indices.push_back((unsigned)idx.vertex_index);
+			}
+			index_offset += fv;
+
+			// per-face material
+			shapes[s].mesh.material_ids[f];
+		}
+	}
+
+	vertCount = verts.size();
+	indexCount = indices.size();
+
+	return makeGeometry(&verts[0], vertCount, &indices[0], indexCount);
 }
 
 geometry makePlane(float width, float height) // finish

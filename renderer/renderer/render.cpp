@@ -12,7 +12,7 @@ geometry makeGeometry(vertex* verts, size_t vertCount, unsigned* indices, size_t
 	newGeo.size = indexCount;
 
 	// generate buffers
-	glGenVertexArrays(1, & newGeo.vao); 	// vertex array object
+	glGenVertexArrays(1, & newGeo.vao); // vertex array object
 	glGenBuffers(1, & newGeo.vbo); // vertex buffer object
 	glGenBuffers(1, & newGeo.ibo); // index buffer object
 
