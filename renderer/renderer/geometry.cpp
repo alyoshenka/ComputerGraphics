@@ -66,12 +66,12 @@ geometry loadObj(const char * fileName) // NOT DONE
 				tinyobj::real_t blue = attrib.colors[3*idx.vertex_index+2];
 
 				vertex vert;
-				vert.pos = { vx, vy, vz, 1};
-				vert.norm = { nx, ny, nz, 1};
-				vert.col = { red, green, blue, 1};
+				vert.pos = { vx, vy, vz, 1 };
+				vert.norm = { nx, ny, nz, 0 };
+				vert.col = { red, green, blue, 1 };
 				vert.uv = { tx, ty };
 				verts.push_back(vert);
-				indices.push_back((unsigned)idx.vertex_index);
+				indices.push_back(3 * f + v); // why this
 			}
 			index_offset += fv;
 

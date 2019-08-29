@@ -1,4 +1,3 @@
-﻿  main.cpp
-c:\users\s189076\desktop\computergraphics\renderer\renderer\main.cpp(89): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\s189076\desktop\computergraphics\renderer\renderer\main.cpp(90): warning C4305: 'initializing': truncation from 'double' to 'float'
+﻿  geometry.cpp
+c:\users\s189076\desktop\computergraphics\renderer\renderer\geometry.cpp(51): warning C4018: '<': signed/unsigned mismatch
   renderer.vcxproj -> C:\Users\s189076\Desktop\ComputerGraphics\renderer\Debug\renderer.exe

@@ -51,7 +51,7 @@ int main()
 	// geometry quad = makeGeometry(quadVerts, 4, quadIndices, 6);
 	// geometry customQuad = makePlane(1.5f, 0.8f);
 	// geometry obj = loadObj("Geometry/tri.obj");
-	geometry cust = loadObj("Geometry/cube.obj");
+	geometry cust = loadObj("Geometry/soulspear.obj");
 
 	shader basicShad = makeShader(load("Shaders/basicVert.txt").c_str(), load("Shaders/basicFrag.txt").c_str());
 	shader colorShad = makeShader(load("Shaders/colorVert.txt").c_str(), load("Shaders/colorFrag.txt").c_str());
@@ -61,7 +61,7 @@ int main()
 
 	glm::mat4 triModel = glm::identity<glm::mat4>();
 	glm::mat4 camProj = glm::perspective(glm::radians(45.f), 640.f / 480.f, 0.1f, 100.f);
-	glm::mat4 camView = glm::lookAt(glm::vec3(0, 0, -5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::mat4 camView = glm::lookAt(glm::vec3(0, 0, -25), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
 	texture tex = loadTexture("Assets/soulspear_diffuse.tga");
 	texture tex2 = loadTexture("Assets/x.png");
@@ -104,7 +104,7 @@ int main()
 		// triModel = glm::translate(triModel, glm::vec3(cos(angle) / 20, sin(angle) / 20, 0));
 		// angle += 0.1f;
 
-		triModel = glm::rotate(triModel, glm::radians(5.f), glm::vec3(0, 1, 0));
+		triModel = glm::rotate(triModel, glm::radians(1.f), glm::vec3(0, 1, 0));
 
 		/*triModel = glm::scale(triModel, glm::vec3(scaleCurrent, 1, 1));
 		scaleCount++;
