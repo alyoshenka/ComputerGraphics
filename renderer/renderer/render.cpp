@@ -28,12 +28,18 @@ geometry makeGeometry(vertex* verts, size_t vertCount, unsigned* indices, size_t
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indexCount * sizeof(unsigned), indices, GL_STATIC_DRAW);
 
 	// describe vertex data
+	// pos
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)0); // position[0] = [4] [floats] for [vertex] at [(void*)0] offset (needs to be normalized = [false])
+	// norm
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)sizeof(vertex::pos));
+	// col
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(sizeof(vertex::pos) + sizeof(vertex::color))); 
+	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(sizeof(vertex::pos) + sizeof(vertex::norm)));
+	// uv
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(sizeof(vertex::pos) + sizeof(vertex::norm) + sizeof(vertex::col)));
 
 	// unbind buffers (in a SPECIFIC order)
 	glBindVertexArray(0); // first
@@ -148,6 +154,11 @@ void setUniform(const shader & shad, GLuint location, const texture & value, int
 
 	// assign the uniform to the shader
 	glProgramUniform1i(shad.program, location, textureSlot);
+}
+
+void setUniform(const shader & shad, GLuint location, const glm::vec3 & value)
+{
+	glProgramUniform3fv(shad.program, location, 1, glm::value_ptr(value));
 }
 
 texture makeTexture(unsigned width, unsigned height, unsigned channels, const unsigned char *pixels)
