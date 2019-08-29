@@ -14,7 +14,7 @@
 
 int main() 
 {
-	loadObj("Geometry/tri.obj");
+	// loadObj("Geometry/tri.obj");
 
 	timeclock t;
 
@@ -49,8 +49,9 @@ int main()
 	unsigned int quadIndices[] = { 3, 2, 0, 3, 1, 2 };
 
 	geometry triangle = makeGeometry(triVerts, 3, triIndices, 3);
-	geometry quad = makeGeometry(quadVerts, 4, quadIndices, 6);
-	geometry customQuad = makePlane(1.5f, 0.8f);
+	// geometry quad = makeGeometry(quadVerts, 4, quadIndices, 6);
+	// geometry customQuad = makePlane(1.5f, 0.8f);
+	// geometry obj = loadObj("Geometry/tri.obj");
 
 	shader basicShad = makeShader(load("Shaders/basicVert.txt").c_str(), load("Shaders/basicFrag.txt").c_str());
 	shader colorShad = makeShader(load("Shaders/colorVert.txt").c_str(), load("Shaders/colorFrag.txt").c_str());
@@ -67,7 +68,8 @@ int main()
 	texture tex3 = loadTexture("Assets/splat.png");
 
 	light sun;
-	sun.direction = glm::vec4{ -1, 0, 0, 1 };
+	sun.dir = glm::vec4{ -1, 0, 0, 1 };
+	sun.col = glm::vec4{ 1, 1, 0, 1 };
 
 	setUniform(camShad, 0, tex, 0);
 	setUniform(camShad, 1, tex2, 1);
@@ -78,7 +80,8 @@ int main()
 	setUniform(lightShad, 2, triModel);
 
 	setUniform(lightShad, 3, tex, 0);
-	setUniform(lightShad, 4, sun.direction);
+	setUniform(lightShad, 4, sun.dir);
+	setUniform(lightShad, 5, sun.col);
 
 	float angle = 0;
 	float scaleNumber = 200;
@@ -88,6 +91,8 @@ int main()
 
 	float lerp = 0;
 	float dir = 0.01f;
+
+	
 
 	while (!game.shouldClose())
 	{
@@ -134,6 +139,7 @@ int main()
 		 // draw(colorShad, triangle);
 		 // draw(lightShad, triangle);
 		 // draw(basicShad, customQuad);
+
 		draw(lightShad, triangle);
 
 		// assert(glGetError() == GL_NO_ERROR);
@@ -154,8 +160,8 @@ int main()
 	}
 
 	freeGeometry(triangle);
-	freeGeometry(quad);
-	freeGeometry(customQuad);
+	// freeGeometry(quad);
+	// freeGeometry(customQuad);
 	freeShader(basicShad);
 	freeShader(colorShad);
 	freeShader(camShad);

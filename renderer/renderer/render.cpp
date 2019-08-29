@@ -5,8 +5,6 @@
 
 #include <iostream>
 
-int handle = 0;
-
 geometry makeGeometry(vertex* verts, size_t vertCount, unsigned* indices, size_t indexCount)
 {
 	// create instance of geometry
@@ -36,7 +34,7 @@ geometry makeGeometry(vertex* verts, size_t vertCount, unsigned* indices, size_t
 	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)sizeof(vertex::pos));
 	// col
 	glEnableVertexAttribArray(2);
-	glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(sizeof(vertex::pos) + sizeof(vertex::norm)));
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(sizeof(vertex::pos) + sizeof(vertex::norm)));
 	// uv
 	glEnableVertexAttribArray(3);
 	glVertexAttribPointer(3, 2, GL_FLOAT, GL_FALSE, sizeof(vertex), (void*)(sizeof(vertex::pos) + sizeof(vertex::norm) + sizeof(vertex::col)));

@@ -30,8 +30,8 @@ struct texture
 
 struct light
 {
-	glm::vec3 direction;
-	// color
+	glm::vec3 dir;
+	glm::vec4 col;
 };
 
 geometry makeGeometry(vertex* verts, size_t vertCount, unsigned* indices, size_t indexCount);
