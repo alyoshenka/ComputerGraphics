@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-geometry loadObj(const char * fileName)
+geometry loadObj(const char * fileName) // NOT DONE
 {
 	tinyobj::attrib_t attrib;
 	std::vector<tinyobj::shape_t> shapes;

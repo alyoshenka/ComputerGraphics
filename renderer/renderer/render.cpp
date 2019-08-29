@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+int handle = 0;
+
 geometry makeGeometry(vertex* verts, size_t vertCount, unsigned* indices, size_t indexCount)
 {
 	// create instance of geometry
@@ -170,18 +172,28 @@ texture makeTexture(unsigned width, unsigned height, unsigned channels, const un
 		break;
 	}
 
-	texture tex = { 0, width, height, channels };
+	texture tex = { 0, width, height, channels }; // handle??
 
 	// generate and bind texture
+	// you have to bind the texture to perform operations on it
 	glGenTextures(1, &tex.handle);
 	glBindTexture(GL_TEXTURE_2D, tex.handle);
 
 	// buffer/send actual data
+	// texture target, lod level, internal pixel format, w, h, always 0, pixel format, pixel format pt 2, pixel array to load
 	glTexImage2D(GL_TEXTURE_2D, 0, oglFormat, width, height, 0, oglFormat, GL_UNSIGNED_BYTE, pixels); 
 
 	// describe how the texture will be used
+	 // [linear] interpolation when going down [min]
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	// [linear] interpolation when going up [mag]
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// set wrapping values
+	// typical vec3(x, y, z) is vec3(s, t, r) in opengl
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // repeat overlaps (1.5 -> 0.5)
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT); // repeat but flip overlaps (1.5 -> -0.5 (backwards))
+	// glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_BORDER); // anything outside 0-1 is a specified color
 
 	// unbind
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -205,6 +217,10 @@ texture loadTexture(const char * imagePath)
 	rawPixelData = stbi_load(imagePath, &imageWidth, &imageHeight, &imageFormat, STBI_default);
 
 	// ToDO: ensure rawPixelData is NOT NULL, if null -> image failed to load
+	if (nullptr == rawPixelData)
+	{
+		std::cout << "pixeldata null" << std::endl;
+	}
 
 	// pass the data to make the texture
 	texture tex = makeTexture(imageWidth, imageHeight, imageFormat, rawPixelData);

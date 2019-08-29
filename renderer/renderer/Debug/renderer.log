@@ -1,2 +1,4 @@
-﻿  geometry.cpp
+﻿  main.cpp
+c:\users\s189076\desktop\computergraphics\renderer\renderer\main.cpp(75): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\s189076\desktop\computergraphics\renderer\renderer\main.cpp(76): warning C4305: 'initializing': truncation from 'double' to 'float'
   renderer.vcxproj -> C:\Users\s189076\Desktop\ComputerGraphics\renderer\Debug\renderer.exe

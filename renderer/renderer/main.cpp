@@ -10,6 +10,7 @@
 #include <string>
 #include <iostream>
 #include <math.h>
+#include <cmath>
 
 int main() 
 {
@@ -54,20 +55,27 @@ int main()
 	shader basicShad = makeShader(load("Shaders/basicVert.txt").c_str(), load("Shaders/basicFrag.txt").c_str());
 	shader colorShad = makeShader(load("Shaders/colorVert.txt").c_str(), load("Shaders/colorFrag.txt").c_str());
 	shader camShad = makeShader(load("Shaders/camVert.txt").c_str(), load("Shaders/camFrag.txt").c_str());
-	shader uvShad = makeShader(load("Shaders/uvVert.txt").c_str(), load("Shaders/uvFrag.txt").c_str());;
+	shader uvShad = makeShader(load("Shaders/uvVert.txt").c_str(), load("Shaders/uvFrag.txt").c_str());
 
 	glm::mat4 triModel = glm::identity<glm::mat4>();
 	glm::mat4 camProj = glm::perspective(glm::radians(45.f), 640.f / 480.f, 0.1f, 100.f);
 	glm::mat4 camView = glm::lookAt(glm::vec3(0, 0, -10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
 	texture tex = loadTexture("Assets/soulspear_diffuse.tga");
+	texture tex2 = loadTexture("Assets/x.png");
+	texture tex3 = loadTexture("Assets/splat.png");
+
 	setUniform(uvShad, 0, tex, 0);
+	setUniform(uvShad, 1, tex2, 1);
+	setUniform(uvShad, 2, tex3, 2);
 
 	float angle = 0;
 	float scaleNumber = 200;
 	float scaleCount = 0;
 	float scaleValue = 0.01;
 	float scaleCurrent = 0.995;
+
+	float lerp = 0;
 
 	while (!game.shouldClose())
 	{
@@ -103,6 +111,21 @@ int main()
 		 // draw(colorShad, triangle);
 		 // draw(camShad, quad);
 		 // draw(basicShad, customQuad);
+
+		// assert(glGetError() == GL_NO_ERROR);
+
+		GLint loc = glGetUniformLocation(uvShad.program, "val");
+		if (loc != -1)
+		{
+			lerp += 0.001f;
+			glUniform1f(loc, (float)sin(lerp));
+			std::cout << loc << std::endl;
+		}
+		else
+		{
+			std::cout << loc << std::endl;
+		}
+
 		draw(uvShad, triangle);
 	}
 
@@ -112,6 +135,9 @@ int main()
 	freeShader(basicShad);
 	freeShader(colorShad);
 	freeShader(camShad);
+	freeTexture(tex);
+	freeTexture(tex2);
+	freeTexture(tex3);
 	game.term();
 
 	return 0;
