@@ -159,6 +159,11 @@ void setUniform(const shader & shad, GLuint location, const glm::vec3 & value)
 	glProgramUniform3fv(shad.program, location, 1, glm::value_ptr(value));
 }
 
+void setUniform(const shader & shad, GLuint location, const glm::vec4 & value)
+{
+	glProgramUniform4fv(shad.program, location, 1, glm::value_ptr(value));
+}
+
 texture makeTexture(unsigned width, unsigned height, unsigned channels, const unsigned char *pixels)
 {
 	GLenum oglFormat = GL_RGBA; 

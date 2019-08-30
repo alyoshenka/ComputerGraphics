@@ -60,6 +60,8 @@ void setUniform(const shader& shad, GLuint location, const texture &value, int t
 
 void setUniform(const shader& shad, GLuint location, const glm::vec3& value);
 
+void setUniform(const shader & shad, GLuint location, const glm::vec4 & value);
+
 texture makeTexture(unsigned width, unsigned height, unsigned channels, const unsigned char * pixels);
 
 void freeTexture(texture &tex);

@@ -3,22 +3,21 @@
 #include "loader.h"
 #include "geometry.h"
 #include "time.h"
+#include "math.h"
 
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
+#include "glfw/glfw3.h" 
 
 #include <string>
 #include <iostream>
-#include <math.h>
-#include <cmath>
 
 int main() 
 {
-
-	timeclock t;
-
+	int w = 640;
+	int h = 480;
 	context game;
-	game.init(640, 480, "Source3");
+	game.init(w, h, "Source3");
 
 #ifdef _DEBUG
 	glEnable(GL_DEBUG_OUTPUT);
@@ -51,7 +50,7 @@ int main()
 	// geometry quad = makeGeometry(quadVerts, 4, quadIndices, 6);
 	// geometry customQuad = makePlane(1.5f, 0.8f);
 	// geometry obj = loadObj("Geometry/tri.obj");
-	geometry cust = loadObj("Geometry/soulspear.obj");
+	geometry cust = loadObj("Geometry/teapot.obj");
 
 	shader basicShad = makeShader(load("Shaders/basicVert.txt").c_str(), load("Shaders/basicFrag.txt").c_str());
 	shader colorShad = makeShader(load("Shaders/colorVert.txt").c_str(), load("Shaders/colorFrag.txt").c_str());
@@ -61,15 +60,16 @@ int main()
 
 	glm::mat4 triModel = glm::identity<glm::mat4>();
 	glm::mat4 camProj = glm::perspective(glm::radians(45.f), 640.f / 480.f, 0.1f, 100.f);
-	glm::mat4 camView = glm::lookAt(glm::vec3(0, 0, -25), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::mat4 camView = glm::lookAt(glm::vec3(0, 0, -40), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
 	texture tex = loadTexture("Assets/soulspear_diffuse.tga");
 	texture tex2 = loadTexture("Assets/x.png");
 	texture tex3 = loadTexture("Assets/splat.png");
+	texture marble = loadTexture("Assets/paint.jfif");
 
 	light sun;
 	sun.dir = glm::vec4{ 0, 0, 1, 1 };
-	sun.col = glm::vec4{ 1, 1, 0, 1 };
+	sun.col = glm::vec4{ 1, 0, 1, 1 };
 
 	setUniform(camShad, 0, tex, 0);
 	setUniform(camShad, 1, tex2, 1);
@@ -79,7 +79,7 @@ int main()
 	setUniform(lightShad, 1, camView);
 	setUniform(lightShad, 2, triModel);
 
-	setUniform(lightShad, 3, tex, 0);
+	setUniform(lightShad, 3, marble, 0);
 	setUniform(lightShad, 4, sun.dir);
 	setUniform(lightShad, 5, sun.col);
 
@@ -91,6 +91,15 @@ int main()
 
 	float lerp = 0;
 	float dir = 0.01f;	
+
+	// glfw
+	GLdouble x = 0;
+	GLdouble y = 0;
+	int shadowMax = 4;
+	float xDif;
+	float yDif;
+	float xVal;
+	float yVal;
 
 	while (!game.shouldClose())
 	{
@@ -139,6 +148,17 @@ int main()
 		 // draw(basicShad, customQuad);
 
 		// draw(lightShad, triangle);
+
+		glfwGetCursorPos(game.window, &x, &y);
+		xDif = invlerp(0, w, x);
+		yDif = invlerp(0, h, y);
+		xVal = mylerp(-shadowMax, shadowMax, xDif);
+		yVal = mylerp(-shadowMax, shadowMax, yDif);
+		sun.dir.x = xVal;
+		sun.dir.y = yVal;
+
+		setUniform(lightShad, 4, sun.dir);
+
 		draw(lightShad, cust);
 
 		// assert(glGetError() == GL_NO_ERROR);
@@ -167,7 +187,9 @@ int main()
 	freeTexture(tex);
 	freeTexture(tex2);
 	freeTexture(tex3);
+	freeTexture(marble);
 	game.term();
 
 	return 0;
 }
+

@@ -139,6 +139,7 @@
     <ClCompile Include="geometry.cpp" />
     <ClCompile Include="loader.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="math.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="time.cpp" />
   </ItemGroup>
@@ -146,6 +147,7 @@
     <ClInclude Include="context.h" />
     <ClInclude Include="geometry.h" />
     <ClInclude Include="loader.h" />
+    <ClInclude Include="math.h" />
     <ClInclude Include="render.h" />
     <ClInclude Include="time.h" />
   </ItemGroup>
