@@ -4,6 +4,8 @@
 #include "tinyobjectloader/tiny_obj_loader.h"
 
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 geometry loadObj(const char * fileName) // NOT DONE
 {
@@ -86,23 +88,86 @@ geometry loadObj(const char * fileName) // NOT DONE
 	return makeGeometry(&verts[0], vertCount, &indices[0], indexCount);
 }
 
-geometry makePlane(float width, float height) // finish
+// origin in upper left
+// ERROR CHECKING
+// challenge: normal support
+geometry makePlane(float width, float height, int rows, int cols, bool randomizeColors)
 {
-	width /= 2;
-	height /= 2;
+	// requirements:
+	// w, h >= 1
+	// r, c > 0
 
-	// CW
-	vertex quadVerts[] =
+	int vertCount = (rows + 1) * (cols + 1);
+	int indcCount = rows * cols * 6;
+	float rowIncr = width / rows;
+	float colIncr = height / cols;
+
+	vertex * verts = new vertex[vertCount];
+	int idx = 0;
+	for (int y = 0; y <= cols; y++) 
 	{
-		{ {-width, -height, 0, 1} },
-		{ {-width,  height, 0, 1} },
-		{ { width,  height, 0, 1} },
-		{ { width, -height, 0, 1} }
-	};
+		for (int x = 0; x <= rows; x++) 
+		{
+			verts[idx++] = 
+			{ 
+				{ rowIncr * x, -colIncr * y, 0, 1 }, // pos
+				{ 0, 0, 1, 0 }, // norm
+				{ 1, 0, 0, 1}, // col red
+				{ (1.0f * x) / rows, (1.0f * y) / cols } // uv
+			};
+		}
+	}
+	if (randomizeColors)
+	{
+		srand(time(NULL));
+		for (int i = 0; i < vertCount; i++)
+		{
+			verts[i].col = 
+			{
+				(rand() % 11) / 10.0f,
+				(rand() % 11) / 10.0f,
+				(rand() % 11) / 10.0f,
+				1
+			};
+		}
+	}
 
-	unsigned int quadIndices[] = { 0, 2, 1, 0, 3, 2 };
+	for (int i = 0; i < vertCount; i++)
+	{
+		std::cout << verts[i].pos.x << ", " << verts[i].pos.y << std::endl;
+	}
 
-	// geometry quad = makeGeometry(quadVerts, 4, quadIndices, 6);
+	unsigned int * indcs = new unsigned int[indcCount];
+	idx = 0;
+	int blockNum = 1;
 
-	return geometry();
+	for (int y = 0; y < cols; y++)
+	{
+		for (int x = 0; x < rows; x++)
+		{
+			int startNum = (y + 1) * (rows + 1) + x;
+
+			// top left triangle
+			indcs[idx++] = startNum; 			std::cout << indcs[idx - 1] << " ";
+			indcs[idx++] = blockNum;  			std::cout << indcs[idx - 1] << " ";
+			indcs[idx++] = blockNum - 1; 		std::cout << indcs[idx - 1];
+
+			std::cout << std::endl;
+
+			// bottom right triangle
+			indcs[idx++] = startNum;			std::cout << indcs[idx - 1] << " ";
+			indcs[idx++] = startNum + 1;		std::cout << indcs[idx - 1] << " ";
+			indcs[idx++] = blockNum;			std::cout << indcs[idx - 1];
+
+			blockNum++;
+
+			std::cout << std::endl;
+			std::cout << std::endl;
+		}
+		blockNum++;
+	}
+
+	geometry quad = makeGeometry(verts, vertCount, indcs, indcCount);
+
+	return quad;
 }

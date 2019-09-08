@@ -1,0 +1,8 @@
+﻿  geometry.cpp
+e:\programming\schoola\computergraphics\renderer\renderer\geometry.cpp(76): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
+          with
+          [
+              _Ty=unsigned int
+          ]
+e:\programming\schoola\computergraphics\renderer\renderer\geometry.cpp(122): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+  renderer.vcxproj -> E:\Programming\SchoolA\computergraphics\renderer\x64\Debug\renderer.exe

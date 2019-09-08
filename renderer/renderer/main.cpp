@@ -32,9 +32,9 @@ int main()
 	// CCW Triangle
 	vertex triVerts[] =
 	{
-		{ {-0.5f, -0.5f, 0, 1}, { 0, 0, 1, 0 }, { 0, 1, 0, 1 }, {0.f, 0.f} },
-		{ {0.5f,  -0.5f, 0, 1}, { 0, 0, 1, 0 }, { 1, 0, 0, 1 }, {1.f, 0.f} },
-		{ {0,      0.5f, 0, 1}, { 0, 0, 1, 0 }, { 0, 0, 1, 1 }, {.5f, 1.f} }
+		{ {-0.5f, -0.5f, 0, 1}, { 0, 0, 1, 0 }, { 0, 0, 1, 1 }, {0.f, 0.f} },
+		{ {0.5f,  -0.5f, 0, 1}, { 0, 0, 1, 0 }, { 0, 1, 0, 1 }, {1.f, 0.f} },
+		{ {0,      0.5f, 0, 1}, { 0, 0, 1, 0 }, { 1, 0, 0, 1 }, {.5f, 1.f} }
 	};
 
 	vertex quadVerts[] = 
@@ -51,27 +51,28 @@ int main()
 	// create geometry
 	geometry triangle = makeGeometry(triVerts, 3, triIndices, 3);
 	geometry quad = makeGeometry(quadVerts, 4, quadIndices, 6);
-	geometry customQuad = makePlane(1.5f, 0.8f);
+	geometry customQuad = makePlane(0.9f, 0.9f, 2, 5, true);
 	geometry cust = loadObj("Geometry/teapot.obj");
 
 	// load shaders
-	shader basicShad = makeShader(load("Shaders/basicVert.txt").c_str(), load("Shaders/basicFrag.txt").c_str());
-	shader colorShad = makeShader(load("Shaders/colorVert.txt").c_str(), load("Shaders/colorFrag.txt").c_str());
-	shader camShad = makeShader(load("Shaders/camVert.txt").c_str(), load("Shaders/camFrag.txt").c_str());
-	shader uvShad = makeShader(load("Shaders/uvVert.txt").c_str(), load("Shaders/uvFrag.txt").c_str());
-	shader lightShad = makeShader(load("Shaders/lightVert.txt").c_str(), load("Shaders/lightFrag.txt").c_str());
+	shader basicShad = makeShader(load("Shaders/basic.vert").c_str(), load("Shaders/basic.frag").c_str());
+	shader colorShad = makeShader(load("Shaders/color.vert").c_str(), load("Shaders/color.frag").c_str());
+	shader camShad = makeShader(load("Shaders/cam.vert").c_str(), load("Shaders/cam.frag").c_str());
+	shader uvShad = makeShader(load("Shaders/uv.vert").c_str(), load("Shaders/uv.frag").c_str());
+	shader lightShad = makeShader(load("Shaders/light.vert").c_str(), load("Shaders/light.frag").c_str());
 
 	// set up camera
 	glm::mat4 triModel = glm::identity<glm::mat4>();
 	glm::mat4 camProj = glm::perspective(glm::radians(45.f), 640.f / 480.f, 0.1f, 100.f);
 	glm::mat4 camView = glm::lookAt(glm::vec3(0, 0, -40), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-	// lad textures
+	// load textures
 	texture tex = loadTexture("Assets/soulspear_diffuse.tga");
 	texture tex2 = loadTexture("Assets/x.png");
 	texture tex3 = loadTexture("Assets/splat.png");
 	texture marble = loadTexture("Assets/paint.jfif");
 
+	// create sun
 	light sun;
 	sun.dir = glm::vec4{ 0, 0, 1, 1 };
 	sun.col = glm::vec4{ 1, 0, 1, 1 };
@@ -102,26 +103,6 @@ int main()
 	float xVal;
 	float yVal;
 
-	// enable cycling
-	std::vector<geometry> geos;
-	std::vector<shader> shads;
-
-	geos.push_back(triangle);
-	geos.push_back(quad);
-	geos.push_back(customQuad);
-	geos.push_back(cust);
-
-	shads.push_back(basicShad);
-	shads.push_back(colorShad);
-	// shads.push_back(camShad);
-	shads.push_back(uvShad);
-	shads.push_back(lightShad);
-
-	int geoIdx = 0;
-	int shadIdx = 0;
-	int frameWait = 50;
-	int frameElapsed = 50;
-
 	while (!game.shouldClose())
 	{
 		game.tick();
@@ -141,48 +122,33 @@ int main()
 		sun.dir.y = yVal;
 		setUniform(lightShad, 4, sun.dir);
 
-		// check for changes
-		int state = glfwGetMouseButton(game.window, GLFW_MOUSE_BUTTON_LEFT);
-		if (frameElapsed > frameWait && state == GLFW_PRESS)
-		{
-			geoIdx++;
-			frameElapsed = 0;
-			if (geoIdx >= geos.size())
-			{
-				geoIdx = 0;
-			}
-		}
-		state = glfwGetMouseButton(game.window, GLFW_MOUSE_BUTTON_RIGHT);
-		if (frameElapsed > frameWait && state == GLFW_PRESS)
-		{
-			shadIdx++;
-			frameElapsed = 0;
-			if (shadIdx >= shads.size())
-			{
-				shadIdx = 0;
-			}
-		}
-		frameElapsed++;
-
 		// draw(shads[shadIdx], geos[geoIdx]);
 
 		// draw(camShad, triangle);
-		draw(colorShad, triangle);
 		// draw(lightShad, triangle);
-		// draw(basicShad, customQuad);
 	    // draw(lightShad, triangle);
+
+		// yes
+		// draw(basicShad, triangle);
+		// draw(basicShad, customQuad);
+		// draw(colorShad, triangle);
+		draw(colorShad, customQuad);
 	}
 
+	// release memory
 	freeGeometry(triangle);
 	freeGeometry(quad);
 	freeGeometry(customQuad);
+
 	freeShader(basicShad);
 	freeShader(colorShad);
 	freeShader(camShad);
+
 	freeTexture(tex);
 	freeTexture(tex2);
 	freeTexture(tex3);
 	freeTexture(marble);
+
 	game.term();
 
 	return 0;
