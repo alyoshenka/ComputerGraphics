@@ -13,6 +13,9 @@
 #include <iostream>
 #include <vector>
 
+// todo fix gitignore: debug etc
+// assertions
+
 int main() 
 {
 	int w = 640;
