@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
-  m_Name: GlobalPPVolume Profile
+  m_Name: Fade Profile 1
   m_EditorClassIdentifier: 
   settings:
-  - {fileID: 114247650015363564}
---- !u!114 &114247650015363564
+  - {fileID: 114407071292125942}
+--- !u!114 &114407071292125942
 MonoBehaviour:
   m_ObjectHideFlags: 3
   m_CorrespondingSourceObject: {fileID: 0}
@@ -26,7 +26,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: adb84e30e02715445aeb9959894e3b4d, type: 3}
   m_Name: ColorGrading
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
@@ -70,16 +70,16 @@ MonoBehaviour:
     value: 0
   tint:
     overrideState: 0
-    value: 100
+    value: 0
   colorFilter:
     overrideState: 1
-    value: {r: 1, g: 1, b: 1, a: 1}
+    value: {r: 0, g: 0, b: 0, a: 1}
   hueShift:
     overrideState: 0
-    value: 13
+    value: 0
   saturation:
     overrideState: 1
-    value: 6
+    value: -6
   brightness:
     overrideState: 0
     value: 0
@@ -88,16 +88,16 @@ MonoBehaviour:
     value: 0
   contrast:
     overrideState: 1
-    value: 8
+    value: -6
   mixerRedOutRedIn:
     overrideState: 0
-    value: 200
+    value: 100
   mixerRedOutGreenIn:
     overrideState: 0
-    value: 200
+    value: 0
   mixerRedOutBlueIn:
     overrideState: 0
-    value: 200
+    value: 0
   mixerGreenOutRedIn:
     overrideState: 0
     value: 0

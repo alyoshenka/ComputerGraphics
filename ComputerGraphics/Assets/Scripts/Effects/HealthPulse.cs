@@ -87,6 +87,9 @@ public class HealthPulse : MonoBehaviour
 
     void OnDestroy()
     {
-        RuntimeUtilities.DestroyVolume(m_Volume, true, true);
+        if (null != m_Volume)
+        {
+            RuntimeUtilities.DestroyVolume(m_Volume, true, true);
+        }
     }
 }
