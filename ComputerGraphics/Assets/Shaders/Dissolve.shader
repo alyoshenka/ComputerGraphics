@@ -4,6 +4,7 @@
 	{
 		_MainTex("Texture", 2D) = "white" {}
 		_DissolveTex("DissolveMap", 2D) = "white" {}
+		_DissolveVal("DissolvedValue", Range(0.0, 1.0)) = 1.0
 	}
 
 	SubShader
@@ -50,7 +51,7 @@
 			{
 				fixed4 col = tex2D(_MainTex, i.uv);
 				fixed4 sampleA = tex2D(_DissolveTex, i.uv);
-				col.a = ((sampleA.r + sampleA.g + sampleA.b) / 3.0) / 255 / 2 + _DissolveVal / 2;
+				if (sampleA.x < _DissolveVal) { discard; }
 				return col;
 			}
 
