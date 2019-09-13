@@ -11,7 +11,7 @@
     }
     SubShader
     {
-        Tags { "Queue" = "Transparent" "RenderType" = "Transparent"  "LightMode" = "ShadowCaster" }
+        Tags { "Queue" = "Transparent" "RenderType" = "Transparent" }
 		Blend SrcAlpha OneMinusSrcAlpha
         LOD 100
 
@@ -64,7 +64,7 @@
             fixed4 frag (v2f i) : SV_Target
             {
                 //return fixed4(1,1,1,1);
-                return Linear01Depth(tex2D(_LastCameraDepthTexture , i.uv).r);
+                // return Linear01Depth(tex2D(_LastCameraDepthTexture , i.uv).r);
 
                 // taken from https://roystan.net/articles/outline-shader.html
 
