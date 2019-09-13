@@ -130,7 +130,8 @@
                 {
                     col = _Debug;
                 }
-                else{
+                else
+                {
                     col = _Other;
                 }
 

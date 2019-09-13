@@ -5,19 +5,24 @@ using UnityEngine;
 public class Scroll : MonoBehaviour
 {
     [Range(0, 1)]
-    public float scrollSpeed;
+    public float scrollForward;
+    [Range(-0.5f, 0.5f)]
+    public float scrollSideways;
     public Material mat;
 
-    float scrollElapsed;
+    float scrollForwardElapsed;
+    float scrollSidewaysElapsed;
 
     void Start()
     {
-        scrollElapsed = 0;
+        scrollForwardElapsed = scrollSidewaysElapsed= 0;
     }
 
     void Update()
     {
-        scrollElapsed += Time.deltaTime * scrollSpeed;
-        mat.SetFloat("_ScrollValue", scrollElapsed);
+        scrollForwardElapsed += Time.deltaTime * scrollForward;
+        scrollSidewaysElapsed += Time.deltaTime * scrollSideways;
+        mat.SetFloat("_ScrollForward", scrollForwardElapsed);
+        mat.SetFloat("_ScrollSideways", scrollSidewaysElapsed);
     }
 }

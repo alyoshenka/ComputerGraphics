@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: ScreenSpace
-  m_Shader: {fileID: 4800000, guid: 7824453e92c6fe0498b65189da1ef4ac, type: 3}
+  m_Shader: {fileID: 4800000, guid: 66d767a071602214783b4bd800955fe5, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -23,5 +23,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    m_Floats: []
+    m_Floats:
+    - _ZOffset: 2
     m_Colors: []

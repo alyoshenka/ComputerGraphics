@@ -1,4 +1,4 @@
-﻿Shader "Unlit/ScreenSpace"
+﻿Shader "Debug/ScreenSpace"
 {
 	Properties
 	{
