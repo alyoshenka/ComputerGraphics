@@ -35,7 +35,7 @@ MonoBehaviour:
     value: 0
   offsetX:
     overrideState: 1
-    value: 0
+    value: 0.01
   offsetY:
     overrideState: 1
     value: 0
