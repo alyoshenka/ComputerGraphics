@@ -32,4 +32,13 @@ MonoBehaviour:
     value: 1
   blend:
     overrideState: 1
-    value: 0.506
+    value: 0
+  offsetX:
+    overrideState: 1
+    value: 0
+  offsetY:
+    overrideState: 1
+    value: 0
+  offsetZ:
+    overrideState: 1
+    value: 0
