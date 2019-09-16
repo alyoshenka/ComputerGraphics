@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
-
 public class CustomPPEffector : MonoBehaviour
 {
     PostProcessVolume m_Volume;
@@ -23,7 +22,8 @@ public class CustomPPEffector : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        m_ChromA.offsetX.value = 0.01f;
+        m_ChromA.offsetX.value = Mathf.Sin(Time.realtimeSinceStartup);
+        Debug.Log(m_ChromA.offsetX.value);
     }
 
     void OnDestroy()

@@ -26,19 +26,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5473ae328be1cec43b2fea8207310d7b, type: 3}
   m_Name: CustomPostProcess
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   enabled:
     overrideState: 1
     value: 1
-  blend:
-    overrideState: 1
-    value: 0
   offsetX:
     overrideState: 1
-    value: 0.01
+    value: 0.0078
   offsetY:
     overrideState: 1
-    value: 0
+    value: -0.01
   offsetZ:
     overrideState: 1
-    value: 0
+    value: -0.01

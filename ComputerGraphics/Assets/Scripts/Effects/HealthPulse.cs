@@ -48,7 +48,12 @@ public class HealthPulse : MonoBehaviour
 
     [Header("Settings vars")]
     public float vignetteSmoothness = 0.3f;
-    public float bloomDiffusion = 5f; 
+    public float bloomDiffusion = 5f;
+
+    [Header("Debug")]
+    CustomPostProcess m_chromA;
+    [Range(0, 0.01f)]
+    public float x;
 
 
     // Start is called before the first frame update
@@ -71,7 +76,11 @@ public class HealthPulse : MonoBehaviour
         m_DepthOfFeild.enabled.Override(true);
         m_DepthOfFeild.focusDistance.Override(focDistMin);
 
-        PostProcessEffectSettings[] vals = { m_Vignette, m_ColorGrading, m_Bloom, m_DepthOfFeild };
+        m_chromA = ScriptableObject.CreateInstance<CustomPostProcess>();
+        m_chromA.enabled.Override(true);
+        m_chromA.offsetX.Override(0);
+
+        PostProcessEffectSettings[] vals = { m_Vignette, m_ColorGrading, m_Bloom, m_DepthOfFeild, m_chromA };
         m_Volume = PostProcessManager.instance.QuickVolume(gameObject.layer, 100f, vals);
     }
 
@@ -83,6 +92,8 @@ public class HealthPulse : MonoBehaviour
         m_ColorGrading.saturation.value = Mathf.Lerp(cgMin, cgMax, Mathf.InverseLerp(cgBegin, 0, health));
         m_Bloom.intensity.value = Mathf.Lerp(bloomMin, bloomMax, Mathf.InverseLerp(bloomBegin, 0, health));
         m_DepthOfFeild.focusDistance.value = Mathf.Lerp(focDistMin, focDistMax, Mathf.InverseLerp(dofBegin, 0, health));
+
+        m_chromA.offsetX.value = x;
     }
 
     void OnDestroy()

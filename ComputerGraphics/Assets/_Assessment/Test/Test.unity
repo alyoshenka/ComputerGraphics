@@ -136,18 +136,6 @@ MonoBehaviour:
   max: 0.01
   min: -0.01
   mat: {fileID: 2100000, guid: 6281d9350dc42a749be96291cd6fa7b9, type: 2}
---- !u!114 &180011543
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 180011541}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25e464c6c3cc8d1449af7f3852f942ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &303870756
 GameObject:
   m_ObjectHideFlags: 0
@@ -445,13 +433,15 @@ GameObject:
   m_Component:
   - component: {fileID: 1812038303}
   - component: {fileID: 1812038302}
+  - component: {fileID: 1812038304}
+  - component: {fileID: 1812038305}
   m_Layer: 8
   m_Name: Effects
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1812038302
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -477,9 +467,51 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1812038301}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.042422414, y: 0.11873031, z: -0.53272367}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1812038304
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1812038301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 25e464c6c3cc8d1449af7f3852f942ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1812038305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1812038301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3de50658ec250a14dbd46454981564bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health: 100
+  heartBeatSpeed: 0
+  vignetteBegin: 100
+  vignetteMin: 0
+  vignetteMax: 1
+  vignetteOsc: 0
+  cgBegin: 100
+  cgMin: 0
+  cgMax: -100
+  bloomBegin: 100
+  bloomMin: 0
+  bloomMax: 100
+  dofBegin: 100
+  focDistMin: 10
+  focDistMax: 0.1
+  vignetteSmoothness: 0.3
+  bloomDiffusion: 5
+  x: 0
