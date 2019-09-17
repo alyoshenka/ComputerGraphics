@@ -27,13 +27,13 @@
     <ClCompile Include="loader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="time.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="geometry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="math.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="glmVals.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -47,13 +47,13 @@
     <ClInclude Include="loader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="time.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="geometry.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="math.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glmVals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -58,6 +58,10 @@ void setUniform(const shader &shad, GLuint location, const glm::mat4 &value);
 
 void setUniform(const shader& shad, GLuint location, const texture &value, int textureSlot);
 
+void setUniform(const shader & shad, GLuint location, const glm::float32 value);
+
+void setUniform(const shader & shad, GLuint location, const glm::vec2 & value);
+
 void setUniform(const shader& shad, GLuint location, const glm::vec3& value);
 
 void setUniform(const shader & shad, GLuint location, const glm::vec4 & value);

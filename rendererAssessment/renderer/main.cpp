@@ -4,6 +4,7 @@
 #include "geometry.h"
 #include "time.h"
 #include "math.h"
+#include "glmVals.h"
 
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
@@ -21,7 +22,7 @@ int main()
 	int w = 640;
 	int h = 480;
 	context game;
-	game.init(w, h, "Source3");
+	game.init(w, h, "Renderer Assessment");
 
 #ifdef _DEBUG
 	glEnable(GL_DEBUG_OUTPUT);
@@ -33,12 +34,8 @@ int main()
 
 	geometry teapot = loadObj("Geometry/teapot.obj");
 
-	// load shaders
-	shader basicShad = makeShader(load("Shaders/basic.vert").c_str(), load("Shaders/basic.frag").c_str());
-	shader colorShad = makeShader(load("Shaders/color.vert").c_str(), load("Shaders/color.frag").c_str());
-	shader camShad = makeShader(load("Shaders/cam.vert").c_str(), load("Shaders/cam.frag").c_str());
-	shader uvShad = makeShader(load("Shaders/uv.vert").c_str(), load("Shaders/uv.frag").c_str());
-	shader lightShad = makeShader(load("Shaders/light.vert").c_str(), load("Shaders/light.frag").c_str());
+	// load shader
+	shader lightShad = makeShader(load("Shaders/light.vert").c_str(), load("Shaders/lightBlend.frag").c_str());
 
 	// set up camera
 	glm::mat4 triModel = glm::identity<glm::mat4>();
@@ -50,26 +47,22 @@ int main()
 	texture marble = loadTexture("Assets/paint.jfif");
 
 	// create sun
-	light sun;
-	sun.dir = glm::vec4{ 0, 0, 1, 1 };
-	sun.col = glm::vec4{ 1, 0, 1, 1 };
+	light sun; 
+	sun.dir = glmVals::forward;
+	sun.col = glmVals::red;
 
-	// set shader uniforms
-	setUniform(camShad, 2, splat, 2);
-
-	setUniform(camShad, 0, camProj);
-	setUniform(camShad, 1, camView);
-	setUniform(camShad, 2, triModel);
-
+	// set camera uniform
 	setUniform(lightShad, 0, camProj);
 	setUniform(lightShad, 1, camView);
 	setUniform(lightShad, 2, triModel);
 
+	// set light uniform
 	setUniform(lightShad, 3, marble, 0);
 	setUniform(lightShad, 4, sun.dir);
 	setUniform(lightShad, 5, sun.col);
-
-	setUniform(basicShad, 3, marble, 0);
+	setUniform(lightShad, 6, glmVals::up);
+	setUniform(lightShad, 7, glmVals::blue);
+	setUniform(lightShad, 8, { 0.8, 0.5 });
 
 	// glfw
 	GLdouble x = 0;
@@ -102,12 +95,12 @@ int main()
 		draw(lightShad, teapot);
 	}
 
-	freeShader(basicShad);
-	freeShader(colorShad);
-	freeShader(camShad);
+	freeShader(lightShad);
 
 	freeTexture(splat);
 	freeTexture(marble);
+
+	freeGeometry(teapot);
 
 	game.term();
 

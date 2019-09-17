@@ -137,19 +137,19 @@
   <ItemGroup>
     <ClCompile Include="context.cpp" />
     <ClCompile Include="geometry.cpp" />
+    <ClCompile Include="glmVals.cpp" />
     <ClCompile Include="loader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="math.cpp" />
     <ClCompile Include="render.cpp" />
-    <ClCompile Include="time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="context.h" />
     <ClInclude Include="geometry.h" />
+    <ClInclude Include="glmVals.h" />
     <ClInclude Include="loader.h" />
     <ClInclude Include="math.h" />
     <ClInclude Include="render.h" />
-    <ClInclude Include="time.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

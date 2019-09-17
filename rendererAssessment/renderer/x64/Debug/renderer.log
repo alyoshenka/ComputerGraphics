@@ -1,8 +1,8 @@
 ﻿  main.cpp
-e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(94): warning C4244: 'argument': conversion from 'GLdouble' to 'float', possible loss of data
-e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(94): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(95): warning C4244: 'argument': conversion from 'GLdouble' to 'float', possible loss of data
-e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(95): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(96): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(97): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(87): warning C4244: 'argument': conversion from 'GLdouble' to 'float', possible loss of data
+e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(87): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(88): warning C4244: 'argument': conversion from 'GLdouble' to 'float', possible loss of data
+e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(88): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(89): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\programming\schoola\computergraphics\rendererassessment\renderer\main.cpp(90): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   renderer.vcxproj -> E:\Programming\SchoolA\computergraphics\rendererAssessment\x64\Debug\renderer.exe

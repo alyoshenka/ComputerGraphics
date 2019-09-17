@@ -154,6 +154,16 @@ void setUniform(const shader & shad, GLuint location, const texture & value, int
 	glProgramUniform1i(shad.program, location, textureSlot);
 }
 
+void setUniform(const shader & shad, GLuint location, const glm::float32 value)
+{
+	glProgramUniform1f(shad.program, location, value);
+}
+
+void setUniform(const shader & shad, GLuint location, const glm::vec2 & value)
+{
+	glProgramUniform2fv(shad.program, location, 1, glm::value_ptr(value));
+}
+
 void setUniform(const shader & shad, GLuint location, const glm::vec3 & value)
 {
 	glProgramUniform3fv(shad.program, location, 1, glm::value_ptr(value));
