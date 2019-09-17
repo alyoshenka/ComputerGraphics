@@ -1,8 +1,8 @@
-﻿  geometry.cpp
-e:\programming\schoola\computergraphics\renderer\renderer\geometry.cpp(76): warning C4267: 'argument': conversion from 'size_t' to '_Ty', possible loss of data
-          with
-          [
-              _Ty=unsigned int
-          ]
-e:\programming\schoola\computergraphics\renderer\renderer\geometry.cpp(122): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+﻿  main.cpp
+e:\programming\schoola\computergraphics\renderer\renderer\main.cpp(120): warning C4244: 'argument': conversion from 'GLdouble' to 'float', possible loss of data
+e:\programming\schoola\computergraphics\renderer\renderer\main.cpp(120): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\programming\schoola\computergraphics\renderer\renderer\main.cpp(121): warning C4244: 'argument': conversion from 'GLdouble' to 'float', possible loss of data
+e:\programming\schoola\computergraphics\renderer\renderer\main.cpp(121): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\programming\schoola\computergraphics\renderer\renderer\main.cpp(122): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+e:\programming\schoola\computergraphics\renderer\renderer\main.cpp(123): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
   renderer.vcxproj -> E:\Programming\SchoolA\computergraphics\renderer\x64\Debug\renderer.exe
