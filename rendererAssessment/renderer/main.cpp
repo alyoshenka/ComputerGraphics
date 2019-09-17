@@ -19,8 +19,8 @@
 
 int main() 
 {
-	int w = 640;
-	int h = 480;
+	int w = 800;
+	int h = 400;
 	context game;
 	game.init(w, h, "Renderer Assessment");
 
@@ -33,16 +33,19 @@ int main()
 #endif
 
 	geometry teapot = loadObj("Geometry/teapot.obj");
+	geometry spear = loadObj("Geometry/soulspear.obj");
 
 	// load shader
 	shader lightShad = makeShader(load("Shaders/light.vert").c_str(), load("Shaders/lightBlend.frag").c_str());
+	shader basicUV = makeShader(load("Shaders/camUV.vert").c_str(), load("Shaders/camUV.frag").c_str());
 
 	// set up camera
 	glm::mat4 triModel = glm::identity<glm::mat4>();
-	glm::mat4 camProj = glm::perspective(glm::radians(45.f), 640.f / 480.f, 0.1f, 100.f);
+	glm::mat4 camProj = glm::perspective(glm::radians(45.f), 800.f / 400.f, 0.1f, 100.f);
 	glm::mat4 camView = glm::lookAt(glm::vec3(0, 0, -40), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
 	// load textures
+	texture spearTex = loadTexture("Assets/soulspear_diffuse.tga");
 	texture splat = loadTexture("Assets/splat.png");
 	texture marble = loadTexture("Assets/paint.jfif");
 
@@ -54,7 +57,7 @@ int main()
 	// set camera uniform
 	setUniform(lightShad, 0, camProj);
 	setUniform(lightShad, 1, camView);
-	setUniform(lightShad, 2, triModel);
+	setUniform(lightShad, 2, glm::translate(triModel, { 10, 0, 0 }));
 
 	// set light uniform
 	setUniform(lightShad, 3, marble, 0);
@@ -62,7 +65,13 @@ int main()
 	setUniform(lightShad, 5, sun.col);
 	setUniform(lightShad, 6, glmVals::up);
 	setUniform(lightShad, 7, glmVals::blue);
-	setUniform(lightShad, 8, { 0.8, 0.5 });
+	setUniform(lightShad, 8, { 0, 0.7 });
+
+	// spear
+	setUniform(basicUV, 0, camProj);
+	setUniform(basicUV, 1, camView);
+	setUniform(basicUV, 2, triModel);
+	setUniform(basicUV, 3, spearTex, 1);
 
 	// glfw
 	GLdouble x = 0;
@@ -92,14 +101,18 @@ int main()
 		sun.dir.y = yVal;
 		setUniform(lightShad, 4, sun.dir);
 
-		draw(lightShad, teapot);
+		// draw(lightShad, teapot);
+		draw(basicUV, spear);
 	}
 
+	freeShader(basicUV);
 	freeShader(lightShad);
 
+	freeTexture(spearTex);
 	freeTexture(splat);
 	freeTexture(marble);
 
+	freeGeometry(spear);
 	freeGeometry(teapot);
 
 	game.term();
