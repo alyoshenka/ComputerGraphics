@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e6292b2c06870d4495f009f912b9600, type: 3}
   m_Name: Effects Profile
   m_EditorClassIdentifier: 
-  settings:
-  - {fileID: 114777833666455064}
+  settings: []
 --- !u!114 &114777833666455064
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -26,16 +25,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5473ae328be1cec43b2fea8207310d7b, type: 3}
   m_Name: CustomPostProcess
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   enabled:
     overrideState: 1
     value: 1
-  offsetX:
-    overrideState: 1
-    value: 0.0078
-  offsetY:
-    overrideState: 1
-    value: -0.01
-  offsetZ:
-    overrideState: 1
-    value: -0.01
+  RX:
+    overrideState: 0
+    value: 0
+  RY:
+    overrideState: 0
+    value: 0
+  GX:
+    overrideState: 0
+    value: 0
+  GY:
+    overrideState: 0
+    value: 0
+  BX:
+    overrideState: 0
+    value: 0
+  BY:
+    overrideState: 0
+    value: 0

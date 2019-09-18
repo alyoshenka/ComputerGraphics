@@ -51,7 +51,7 @@ public class HealthPulse : MonoBehaviour
     public float bloomDiffusion = 5f;
 
     [Header("Debug")]
-    CustomPostProcess m_chromA;
+    CustomChromaticAberration m_chromA;
     [Range(0, 0.01f)]
     public float x;
 
@@ -76,9 +76,9 @@ public class HealthPulse : MonoBehaviour
         m_DepthOfFeild.enabled.Override(true);
         m_DepthOfFeild.focusDistance.Override(focDistMin);
 
-        m_chromA = ScriptableObject.CreateInstance<CustomPostProcess>();
+        m_chromA = ScriptableObject.CreateInstance<CustomChromaticAberration>();
         m_chromA.enabled.Override(true);
-        m_chromA.offsetX.Override(0);
+        m_chromA.RX.Override(0);
 
         PostProcessEffectSettings[] vals = { m_Vignette, m_ColorGrading, m_Bloom, m_DepthOfFeild, m_chromA };
         m_Volume = PostProcessManager.instance.QuickVolume(gameObject.layer, 100f, vals);
@@ -93,7 +93,7 @@ public class HealthPulse : MonoBehaviour
         m_Bloom.intensity.value = Mathf.Lerp(bloomMin, bloomMax, Mathf.InverseLerp(bloomBegin, 0, health));
         m_DepthOfFeild.focusDistance.value = Mathf.Lerp(focDistMin, focDistMax, Mathf.InverseLerp(dofBegin, 0, health));
 
-        m_chromA.offsetX.value = x;
+        m_chromA.RX.value = x;
     }
 
     void OnDestroy()

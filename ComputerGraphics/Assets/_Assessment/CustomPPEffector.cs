@@ -6,24 +6,24 @@ using UnityEngine.Rendering.PostProcessing;
 public class CustomPPEffector : MonoBehaviour
 {
     PostProcessVolume m_Volume;
-    CustomPostProcess m_ChromA;
+    CustomChromaticAberration m_ChromA;
 
     // Start is called before the first frame update
     void Start()
     {
-        m_ChromA = ScriptableObject.CreateInstance<CustomPostProcess>();
+        m_ChromA = ScriptableObject.CreateInstance<CustomChromaticAberration>();
         m_ChromA.enabled.Override(true);
-        m_ChromA.offsetX.Override(0);
-        m_ChromA.offsetY.Override(0);
-        m_ChromA.offsetZ.Override(0);
+        m_ChromA.RX.Override(0);
+        m_ChromA.GX.Override(0);
+        m_ChromA.BX.Override(0);
         m_Volume = PostProcessManager.instance.QuickVolume(gameObject.layer, 100f, m_ChromA);
     }
 
     // Update is called once per frame
     void Update()
     {
-        m_ChromA.offsetX.value = Mathf.Sin(Time.realtimeSinceStartup);
-        Debug.Log(m_ChromA.offsetX.value);
+        m_ChromA.RX.value = Mathf.Sin(Time.realtimeSinceStartup);
+        // Debug.Log(m_ChromA.offsetX.value);
     }
 
     void OnDestroy()

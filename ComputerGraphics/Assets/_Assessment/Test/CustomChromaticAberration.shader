@@ -1,4 +1,4 @@
-﻿Shader "PostProcess/Test1"
+﻿Shader "PostProcess/CustomChromaticAberration"
 {
     HLSLINCLUDE
 
@@ -7,9 +7,15 @@
         TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
         sampler2D _MainTex_ST;
         float _Blend;
-        float _OffsetX;
-        float _OffsetY;
-        float _OffsetZ;
+
+        float _RX;
+        float _RY;
+
+        float _GX;
+        float _GY;
+
+        float _BX;
+        float _BY;
 
         struct appdata
         {
@@ -37,11 +43,11 @@
         float4 Frag(v2f i) : SV_Target
         {
             float r = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, 
-                float2(i.uv.x + _OffsetX, i.uv.y + _OffsetX)).r;
+                float2(i.uv.x + _RX, i.uv.y + _RY)).r;
             float g = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, 
-                float2(i.uv.x + _OffsetY, i.uv.y + _OffsetY)).g;
+                float2(i.uv.x + _GX, i.uv.y + _GY)).g;
             float b = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, 
-                float2(i.uv.x + _OffsetZ, i.uv.y + _OffsetZ)).b;
+                float2(i.uv.x + _BX, i.uv.y + _BY)).b;
 
             float4 color = float4(r, g, b, 1);
             float luminance = dot(color.rgb, float3(0.2126729, 0.7151522, 0.0721750));
