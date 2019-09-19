@@ -52,7 +52,8 @@ public class JoystickBall : MonoBehaviour,
 
     public Vector2 Value()
     {
-        return new Vector2(ball.transform.position.x - origin.position.x, ball.transform.position.y - origin.position.y).normalized;
+        return new Vector2((ball.transform.position.x - origin.position.x) / -radius, 
+            (ball.transform.position.y - origin.position.y) / -radius);
     }
 
     public void ResetPosition()

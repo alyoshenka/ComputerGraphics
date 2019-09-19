@@ -9,7 +9,9 @@ public class ChannelController : MonoBehaviour
 {
     public JoystickBall red, green, blue;
     public Material outline;
-    [Range(0.001f, 0.05f)]
+    [Range(0.01f, 0.5f)]
+    public float stickMult;
+    [Range(0.001f, 0.1f)]
     public float maxOffset = 0.01f;
     [Range(0.001f, 0.1f)]
     public float correctAllowance;
@@ -44,13 +46,15 @@ public class ChannelController : MonoBehaviour
 
     void Update()
     {
-        holder = red.Value() * maxOffset;
+        // set to only update if joystick active
+
+        holder = red.Value() * stickMult;
         m_ChromA.RX.value = holder.x + offsets[0];
         m_ChromA.RY.value = holder.y + offsets[1];
-        holder = blue.Value() * maxOffset;
+        holder = blue.Value() * stickMult;
         m_ChromA.GX.value = holder.x + offsets[2];
         m_ChromA.GY.value = holder.y + offsets[3];
-        holder = green.Value() * maxOffset;
+        holder = green.Value() * stickMult;
         m_ChromA.BX.value = holder.x + offsets[4];
         m_ChromA.BY.value = holder.y + offsets[5];
 

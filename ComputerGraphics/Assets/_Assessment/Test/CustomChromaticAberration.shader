@@ -6,7 +6,6 @@
 
         TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
         sampler2D _MainTex_ST;
-        float _Blend;
 
         float _RX;
         float _RY;
@@ -49,10 +48,7 @@
             float b = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, 
                 float2(i.uv.x + _BX, i.uv.y + _BY)).b;
 
-            float4 color = float4(r, g, b, 1);
-            float luminance = dot(color.rgb, float3(0.2126729, 0.7151522, 0.0721750));
-            color.rgb = lerp(color.rgb, luminance.xxx, _Blend.xxx);
-            return color;
+            return float4(r, g, b, 1);
         }
 
     ENDHLSL
