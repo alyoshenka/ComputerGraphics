@@ -51,10 +51,10 @@ public class ChannelController : MonoBehaviour
         holder = red.Value() * stickMult;
         m_ChromA.RX.value = holder.x + offsets[0];
         m_ChromA.RY.value = holder.y + offsets[1];
-        holder = blue.Value() * stickMult;
+        holder = green.Value() * stickMult;
         m_ChromA.GX.value = holder.x + offsets[2];
         m_ChromA.GY.value = holder.y + offsets[3];
-        holder = green.Value() * stickMult;
+        holder = blue.Value() * stickMult;
         m_ChromA.BX.value = holder.x + offsets[4];
         m_ChromA.BY.value = holder.y + offsets[5];
 

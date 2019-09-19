@@ -37,16 +37,16 @@ public class JoystickBall : MonoBehaviour,
     // Update is called once per frame
     void Update()
     {
-        /*
-        if (!isSelected)
+        if (Vector3.Distance(origin.position, ball.transform.position) < radius)
         {
-            ball.transform.position = Vector3.MoveTowards(ball.transform.position, 
-                origin.position, returnSpeed * Time.deltaTime); // DONT MOVE
+            if (isSelected && isHovering)
+            {
+                ball.transform.position = Input.mousePosition;
+            }
         }
-        else */
-        if (isSelected && Vector3.Distance(origin.position, ball.transform.position) < radius)
+        else
         {
-            ball.transform.position = Input.mousePosition;
+            ball.transform.position = Vector3.MoveTowards(ball.transform.position, origin.position, returnSpeed * Time.deltaTime);
         }
     }
 
