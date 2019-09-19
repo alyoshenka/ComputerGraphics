@@ -3,18 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
+// outline shader on completion
+
 public class ChannelController : MonoBehaviour
 {
     public JoystickBall red, green, blue;
+    public Material outline;
     [Range(0.001f, 0.05f)]
     public float maxOffset = 0.01f;
+    [Range(0.001f, 0.1f)]
+    public float correctAllowance;
 
     // post processing
     PostProcessVolume m_Volume;
     CustomChromaticAberration m_ChromA;
 
+    float[] offsets;
+
+    // holders
+    Vector3 holder;
+
     void Start()
     {
+        outline.SetFloat("_OutlineThickness", 0.1f);
+
         // initialize post processing 
         m_ChromA = ScriptableObject.CreateInstance<CustomChromaticAberration>();
         m_ChromA.enabled.Override(true);
@@ -26,14 +38,39 @@ public class ChannelController : MonoBehaviour
         m_ChromA.BY.Override(0);
 
         m_Volume = PostProcessManager.instance.QuickVolume(gameObject.layer, 100f, m_ChromA);
+
+        offsets = new float[6];
     }
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        holder = red.Value() * maxOffset;
+        m_ChromA.RX.value = holder.x + offsets[0];
+        m_ChromA.RY.value = holder.y + offsets[1];
+        holder = blue.Value() * maxOffset;
+        m_ChromA.GX.value = holder.x + offsets[2];
+        m_ChromA.GY.value = holder.y + offsets[3];
+        holder = green.Value() * maxOffset;
+        m_ChromA.BX.value = holder.x + offsets[4];
+        m_ChromA.BY.value = holder.y + offsets[5];
+
+        if (WithinAllowance())
         {
-            ShuffleChannels();
-            Debug.Log(m_ChromA.RX.value);
+            outline.SetFloat("_OutlineThickness", 0.5f);
+        }
+        else
+        {
+            outline.SetFloat("_OutlineThickness", 0.1f);
+        }
+
+        if (Input.GetMouseButtonDown(1))
+        {
+            Debug.Log(m_ChromA.RX.value + " " + m_ChromA.RY.value + " " 
+            + m_ChromA.GX.value + " " + m_ChromA.GY.value + " "
+            + m_ChromA.BX.value + " " + m_ChromA.BY.value + " "
+            + (Mathf.Abs(m_ChromA.RX.value) + Mathf.Abs(m_ChromA.RY.value)
+            + Mathf.Abs(m_ChromA.GX.value) + Mathf.Abs(m_ChromA.GY.value)
+            + Mathf.Abs(m_ChromA.BX.value) + Mathf.Abs(m_ChromA.BY.value)));
         }
     }
 
@@ -42,12 +79,24 @@ public class ChannelController : MonoBehaviour
     {
         // IEnumerator for them to look cool
 
-        m_ChromA.RX.value = Random.Range(-maxOffset, maxOffset);
-        m_ChromA.RY.value = Random.Range(-maxOffset, maxOffset);
-        m_ChromA.GX.value = Random.Range(-maxOffset, maxOffset);
-        m_ChromA.GY.value = Random.Range(-maxOffset, maxOffset);
-        m_ChromA.BX.value = Random.Range(-maxOffset, maxOffset);
-        m_ChromA.BY.value = Random.Range(-maxOffset, maxOffset);
+        for(int i = 0; i < 6; i++)
+        {
+            offsets[i] = Random.Range(-maxOffset, maxOffset);
+        }
+
+        red.ResetPosition();
+        green.ResetPosition();
+        blue.ResetPosition();
+
+        outline.SetFloat("_OutlineThickness", 0.1f);
+    }
+
+    bool WithinAllowance()
+    {
+        return Mathf.Abs(m_ChromA.RX - m_ChromA.GX) < correctAllowance
+            && Mathf.Abs(m_ChromA.GX - m_ChromA.BX) < correctAllowance
+            && Mathf.Abs(m_ChromA.RY - m_ChromA.GY) < correctAllowance
+            && Mathf.Abs(m_ChromA.GY - m_ChromA.BY) < correctAllowance;
     }
 
     // clean up post processing

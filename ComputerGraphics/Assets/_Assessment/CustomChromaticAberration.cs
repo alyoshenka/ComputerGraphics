@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
 [Serializable]
-[PostProcess(typeof(CustomChromaticAberrationRenderer), PostProcessEvent.AfterStack, "PostProcess/CustomChromaticAberration", true)]
+[PostProcess(typeof(CustomChromaticAberrationRenderer), PostProcessEvent.AfterStack, "PostProcess/CustomChromaticAberration", false)]
 public sealed class CustomChromaticAberration : PostProcessEffectSettings
 {
     [Range(-0.01f, 0.01f)]

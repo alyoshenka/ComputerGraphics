@@ -1,7 +1,7 @@
 ﻿Shader "Custom/Toon"{
 	//show values to edit in inspector
 	Properties{
-        _OutlineColor ("Outline color", COlor) = (0, 0, 0, 1)
+        _OutlineColor ("Outline color", Color) = (0, 0, 0, 1)
         _OutlineThickness ("Outline thickness", Range(0, 1)) = 0.1
 
 		_Color ("Tint", Color) = (0, 0, 0, 1)
@@ -53,7 +53,6 @@
 			//the fragment shader
 			fixed4 frag(v2f i) : SV_TARGET{
 				fixed4 col = tex2D(_MainTex, i.uv);
-				col *= _Color;
 				return col;
 			}
 

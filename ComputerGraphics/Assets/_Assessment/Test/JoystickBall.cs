@@ -6,6 +6,8 @@ using UnityEngine.UI;
 
 // ToDo
 // fix pointer logic
+// organize files
+// organize repo
 
 [RequireComponent(typeof(RectTransform))]
 public class JoystickBall : MonoBehaviour, 
@@ -46,16 +48,16 @@ public class JoystickBall : MonoBehaviour,
         {
             ball.transform.position = Input.mousePosition;
         }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            Debug.Log(Value());
-        }
     }
 
     public Vector2 Value()
     {
         return new Vector2(ball.transform.position.x - origin.position.x, ball.transform.position.y - origin.position.y).normalized;
+    }
+
+    public void ResetPosition()
+    {
+        ball.transform.position = origin.position;
     }
 
     #region Pointer Events
@@ -100,6 +102,6 @@ public class JoystickBall : MonoBehaviour,
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(transform.position, radius);
+        Gizmos.DrawWireSphere(origin.position, radius);
     }
 }
