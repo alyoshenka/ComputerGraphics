@@ -232,10 +232,11 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   healthLossSpeed: 5
   healthGainSpeed: 10
-  speed: 1
-  radius: 10
+  speed: 3
+  radius: 20
   lerp: 0.01
   playerToThis: 0.01
+  retarget: 5
 --- !u!1 &5724704947237839716
 GameObject:
   m_ObjectHideFlags: 0

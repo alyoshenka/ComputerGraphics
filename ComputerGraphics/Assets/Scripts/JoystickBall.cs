@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 // ToDo
-// fix pointer logic
 // organize files
 // organize repo
 
@@ -28,13 +27,11 @@ public class JoystickBall : MonoBehaviour,
     bool isHovering;
     bool isSelected;
 
-    // Start is called before the first frame update
     void Start()
     {
         ball.color = baseColor;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Vector3.Distance(origin.position, ball.transform.position) < radius)

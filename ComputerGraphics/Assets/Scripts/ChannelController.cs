@@ -66,16 +66,6 @@ public class ChannelController : MonoBehaviour
         {
             outline.SetFloat("_OutlineThickness", 0.1f);
         }
-
-        if (Input.GetMouseButtonDown(1))
-        {
-            Debug.Log(m_ChromA.RX.value + " " + m_ChromA.RY.value + " " 
-            + m_ChromA.GX.value + " " + m_ChromA.GY.value + " "
-            + m_ChromA.BX.value + " " + m_ChromA.BY.value + " "
-            + (Mathf.Abs(m_ChromA.RX.value) + Mathf.Abs(m_ChromA.RY.value)
-            + Mathf.Abs(m_ChromA.GX.value) + Mathf.Abs(m_ChromA.GY.value)
-            + Mathf.Abs(m_ChromA.BX.value) + Mathf.Abs(m_ChromA.BY.value)));
-        }
     }
 
     // shuffle the color channel offsets

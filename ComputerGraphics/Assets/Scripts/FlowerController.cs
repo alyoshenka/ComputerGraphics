@@ -56,7 +56,7 @@ public class FlowerController : MonoBehaviour
         idx = (int)Mathf.Lerp(0, healthColors.Count - 1, f / radius);
         flowerTrail.colorOverTrail = healthColors[idx];
 
-        if (idx == healthColors.Count - 1)
+        if (idx >= healthColors.Count - 2)
         {
             healthEffect.health -= healthLossSpeed * Time.deltaTime;
         }
