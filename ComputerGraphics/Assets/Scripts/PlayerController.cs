@@ -50,21 +50,6 @@ public class PlayerController : MonoBehaviour
         {
             velocity.y += acceleration.y * Time.deltaTime;
         }
-        else
-        {
-            if(Mathf.Abs(velocity.y) < epsilon)
-            {
-                velocity.y = 0;
-            }
-            else if(velocity.y > 0)
-            {
-                velocity.y -= deceleration.y * Time.deltaTime;
-            }
-            else
-            {
-                velocity.y += deceleration.y * Time.deltaTime;
-            }
-        }
 
         velocity.x = Mathf.Clamp(velocity.x, -maxSpeed.x, maxSpeed.x);
         velocity.y = Mathf.Clamp(velocity.y, -maxSpeed.y, maxSpeed.y);

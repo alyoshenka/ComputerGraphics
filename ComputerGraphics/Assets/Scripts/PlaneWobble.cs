@@ -62,4 +62,9 @@ public class PlaneWobble : MonoBehaviour
         mesh.SetVertices(verts);
         meshCol.sharedMesh = mesh;
     }
+
+    void OnDestroy()
+    {
+        mesh.SetVertices(origVerts);
+    }
 }

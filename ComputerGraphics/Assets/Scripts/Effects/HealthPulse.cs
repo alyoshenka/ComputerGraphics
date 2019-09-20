@@ -8,7 +8,7 @@ public class HealthPulse : MonoBehaviour
     [Header("Health vars")]
 
     [Range(0, 100)]
-    public int health;
+    public float health;
     public float heartBeatSpeed;
 
     // postprocesing
@@ -94,6 +94,8 @@ public class HealthPulse : MonoBehaviour
         m_DepthOfFeild.focusDistance.value = Mathf.Lerp(focDistMin, focDistMax, Mathf.InverseLerp(dofBegin, 0, health));
 
         m_chromA.RX.value = x;
+
+        health = Mathf.Clamp(health, 0, 100);
     }
 
     void OnDestroy()
