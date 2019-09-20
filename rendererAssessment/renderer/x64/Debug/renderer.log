@@ -1,8 +1,0 @@
-﻿  main.cpp
-c:\users\s189076\desktop\computergraphics\rendererassessment\renderer\main.cpp(99): warning C4244: 'argument': conversion from 'GLdouble' to 'float', possible loss of data
-c:\users\s189076\desktop\computergraphics\rendererassessment\renderer\main.cpp(99): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\s189076\desktop\computergraphics\rendererassessment\renderer\main.cpp(100): warning C4244: 'argument': conversion from 'GLdouble' to 'float', possible loss of data
-c:\users\s189076\desktop\computergraphics\rendererassessment\renderer\main.cpp(100): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\s189076\desktop\computergraphics\rendererassessment\renderer\main.cpp(101): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-c:\users\s189076\desktop\computergraphics\rendererassessment\renderer\main.cpp(102): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-  renderer.vcxproj -> C:\Users\s189076\Desktop\ComputerGraphics\rendererAssessment\x64\Debug\renderer.exe

@@ -5,10 +5,10 @@
 [Bb]uilds/
 Assets/AssetStoreTools*
 unity-chan!/
-/Debug/*
-/Release/*
-/x64/*
-/x86/*
+**/Debug/
+**/Release/
+**/x64/
+**/x86/
 
 # Visual Studio cache directory
 .vs/
