@@ -1,4 +1,4 @@
-#version 330
+#version 430
 
 layout (location = 3) uniform sampler2D albedo;
 

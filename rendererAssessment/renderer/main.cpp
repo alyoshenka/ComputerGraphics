@@ -16,6 +16,7 @@
 
 // todo fix gitignore: debug etc
 // assertions
+// https://www.lighthouse3d.com/tutorials/glsl-tutorial/directional-lights/
 
 int main() 
 {
@@ -48,16 +49,24 @@ int main()
 	texture spearTex = loadTexture("Assets/soulspear_diffuse.tga");
 	texture splat = loadTexture("Assets/splat.png");
 	texture marble = loadTexture("Assets/paint.jfif");
+	
+	// spear
+	setUniform(basicUV, 0, camProj);
+	setUniform(basicUV, 1, camView);
+	setUniform(basicUV, 2, glm::rotate(glm::translate(triModel, { -6, -4, -27 }), glm::radians(-30.f), glm::vec3(0, 1, 0)));
+	setUniform(basicUV, 3, spearTex, 1);
 
 	// create sun
-	light sun; 
+	light sun;
 	sun.dir = glmVals::forward;
 	sun.col = glmVals::red;
+
+	triModel = glm::translate(triModel, { 10, 0, 0 });
 
 	// set camera uniform
 	setUniform(lightShad, 0, camProj);
 	setUniform(lightShad, 1, camView);
-	setUniform(lightShad, 2, glm::translate(triModel, { 10, 0, 0 }));
+	setUniform(lightShad, 2, triModel);
 
 	// set light uniform
 	setUniform(lightShad, 3, marble, 0);
@@ -67,11 +76,6 @@ int main()
 	setUniform(lightShad, 7, glmVals::blue);
 	setUniform(lightShad, 8, { 0, 0.7 });
 
-	// spear
-	setUniform(basicUV, 0, camProj);
-	setUniform(basicUV, 1, camView);
-	setUniform(basicUV, 2, triModel);
-	setUniform(basicUV, 3, spearTex, 1);
 
 	// glfw
 	GLdouble x = 0;
@@ -101,7 +105,7 @@ int main()
 		sun.dir.y = yVal;
 		setUniform(lightShad, 4, sun.dir);
 
-		// draw(lightShad, teapot);
+		draw(lightShad, teapot);
 		draw(basicUV, spear);
 	}
 
