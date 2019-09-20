@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: HeightOffset
-  m_Shader: {fileID: 4800000, guid: 7afcf4d50fe757b4398abdf145876c56, type: 3}
+  m_Shader: {fileID: 4800000, guid: 453b3b823907d0e4fb77a2f53f01c986, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -72,14 +72,18 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _PeakRange: 1
     - _ScrollValue: 4.1153507
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _UVSec: 0
+    - _ValleyRange: -1
     - _YOffset: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _LevelColor: {r: 1, g: 1, b: 1, a: 1}
     - _PeakColor: {r: 0.4009434, g: 1, b: 0.6295171, a: 1}
+    - _ValleyColor: {r: 1, g: 0, b: 0, a: 1}

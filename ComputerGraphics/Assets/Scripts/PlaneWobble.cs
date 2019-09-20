@@ -7,8 +7,7 @@ public class PlaneWobble : MonoBehaviour
     public Texture2D heightMap;
     [Range(0, 20)]
     public float heightScale;
-    [Range(1, 50)]
-    public float period;
+    [Range(0, 1)]
     public float speed;
 
     Mesh mesh;
@@ -20,12 +19,9 @@ public class PlaneWobble : MonoBehaviour
     Vector3 delta;
     Vector2 offset;
 
-    int total;
-
-    // Start is called before the first frame update
     void Start()
     {
-        mesh = GetComponent<MeshFilter>().mesh;
+        mesh = GetComponent<MeshFilter>().sharedMesh;
         meshCol = GetComponent<MeshCollider>();
         uvs = new List<Vector2>();
         verts = new List<Vector3>();
@@ -38,25 +34,26 @@ public class PlaneWobble : MonoBehaviour
         offset = Vector2.zero;
         delta = Vector3.zero;
         pixels = heightMap.GetPixels();
-
-        total = 0;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        total++;
         offset.y += heightMap.width * speed * Time.deltaTime;
+        CalculateMesh();
+    }
+
+    void CalculateMesh()
+    {
         for (int i = 0; i < origVerts.Count; i++)
         {
-            // int x = (int)Mathf.Floor(heightMap.width * (uvs[i].x / heightMap.width));
-
-            int idx = (int)(heightMap.width * uvs[i].x) + (int)(heightMap.height * uvs[i].y) * heightMap.width;
+            int idx = (int)(heightMap.width * uvs[i].x)
+                + (int)(heightMap.height * uvs[i].y) * heightMap.width;
             idx += (int)offset.y;
-            if (idx != 0) { idx = (pixels.Length - 1) % idx; }
+            if (idx != 0)
+            {
+                idx = idx % (pixels.Length - 1);
+            }
             delta.y = pixels[idx].grayscale;
-            // delta.y = Mathf.Lerp(-1, 1, delta.y);
-            // delta.y = Mathf.Sin((uvs[i].y + offset.y) * period);
 
             delta.y *= heightScale;
             delta.y -= heightScale / 2;
@@ -64,13 +61,5 @@ public class PlaneWobble : MonoBehaviour
         }
         mesh.SetVertices(verts);
         meshCol.sharedMesh = mesh;
-    }
-
-    void OnDestroy() // needed?
-    {
-        if (null != mesh)
-        {
-            Destroy(mesh);
-        }
     }
 }

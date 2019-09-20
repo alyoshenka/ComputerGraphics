@@ -214,7 +214,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heightMap: {fileID: 2800000, guid: 6bc5bdcbaa651444caee62130ef0f09e, type: 3}
   heightScale: 9.21
-  period: 22.9
   speed: 0.1
 --- !u!64 &404305484
 MeshCollider:

@@ -23,8 +23,8 @@ public class SceneController : MonoBehaviour
     [Header("Components")]
     [Tooltip("Player animator")]
     public Animator animator;
-    [Tooltip("Scroll controller")]
-    public Scroll groundScroll;
+    // [Tooltip("Scroll controller")]
+    // public Scroll groundScroll;
 
     // Start is called before the first frame update
     void Start()
@@ -42,7 +42,7 @@ public class SceneController : MonoBehaviour
     {
         animator.SetFloat("Speed", runSpeed);
         animator.SetFloat("Tilt", leanVal);
-        groundScroll.scrollForward = runSpeed * playerToGroundF;
-        groundScroll.scrollSideways = leanVal * playerToGroundS;
+        // groundScroll.scrollForward = runSpeed * playerToGroundF;
+        // groundScroll.scrollSideways = leanVal * playerToGroundS;
     }
 }

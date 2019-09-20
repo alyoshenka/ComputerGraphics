@@ -16,6 +16,7 @@ public class SceneEntrance : MonoBehaviour
     void Start()
     {
         pathIdx = 0;
+        mainCam.transform.position = path[0].position;
     }
 
     // Update is called once per frame
