@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering.PostProcessing;
 
+/// <summary>
+/// Apply cosmetic effects on low health
+/// </summary>
 public class HealthPulse : MonoBehaviour
 {
     [Header("Health vars")]
@@ -50,7 +53,6 @@ public class HealthPulse : MonoBehaviour
     public float vignetteSmoothness = 0.3f;
     public float bloomDiffusion = 5f;
 
-    // Start is called before the first frame update
     void Start()
     {
         m_Vignette = ScriptableObject.CreateInstance<Vignette>();
@@ -74,11 +76,9 @@ public class HealthPulse : MonoBehaviour
         m_Volume = PostProcessManager.instance.QuickVolume(gameObject.layer, 100f, vals);
     }
 
-    // Update is called once per frame
     void Update()
     {
         m_Vignette.intensity.value = Mathf.Lerp(vignetteMin, vignetteMax, Mathf.InverseLerp(vignetteBegin, 0, health));
-        // + Mathf.Sin(Time.realtimeSinceStartup * heartBeatSpeed) * vignetteOsc;
         m_ColorGrading.saturation.value = Mathf.Lerp(cgMin, cgMax, Mathf.InverseLerp(cgBegin, 0, health));
         m_Bloom.intensity.value = Mathf.Lerp(bloomMin, bloomMax, Mathf.InverseLerp(bloomBegin, 0, health));
         m_DepthOfFeild.focusDistance.value = Mathf.Lerp(focDistMin, focDistMax, Mathf.InverseLerp(dofBegin, 0, health));
