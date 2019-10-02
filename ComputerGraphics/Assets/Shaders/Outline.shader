@@ -1,96 +1,147 @@
-﻿// The name provided below is what will appear in the editor
-//   Use '/' to organize shaders into specific categories (or create your own)
-Shader "Custom/Outline"
+﻿Shader "Custom/PostProcessing/Outline"
 {
-  // Defines shader properties that can be exposed to the inspector
-  //   These are often defined ahead of time in your materials
-  Properties
-  {
-    // Convention is as follows:
-    //   _PropertyName ("InspectorName", Type) = default-value
-    _Color ("Color", Color) = (1,1,1,1)
-    _MainTex ("Albedo (RGB)", 2D) = "white" {}
-    _Glossiness ("Smoothness", Range(0,1)) = 0.5
-    _Metallic ("Metallic", Range(0,1)) = 0.0
-
-    // Note that the name of the property (and its "type") must match the name
-    // of the field as it is defined in the subshader below.
-  }
-
-  // Defines subshaders (like individual shader programs inside of this mega-shader)
-  //   Shaders can have multiple subshaders for different needs (aesthetics/performance)
-  SubShader
-  {
-    // Tags provide meta-data to the renderer affect things like render order
-    Tags { "RenderType"="Opaque" }
-
-    // Level-of-detail value for this shader. Denotes complexity.
-    //   More complex shaders should have a higher LOD value.
-    //   The maximum LOD value can be defined in script.
-    //   see: https://docs.unity3d.com/Manual/SL-ShaderLOD.html
-    LOD 200
-
-    // MARKS THE START OF THE CGPROGRAM
-    CGPROGRAM
-
-    // Declare/define any preprocessor things here
-    //   Pragmas allow you to set flags
-    // 
-    // A list of different directives you can provide can be found online:
-    //   https://docs.unity3d.com/Manual/SL-SurfaceShaders.html
-
-    // This is the default set of pragmas in a Standard Surface shader.
-    // Physically based Standard lighting model, and enable shadows on all light types
-    // 
-    // Let's break this down...
-    //   'surface' allows us to provide the identifier for your surface shader's function
-    //     In this case, it's called the 'surf' function, which follows the above keyword
-    //
-    //   'Standard` is the lighting model that we're using
-    //     This also affects the parameters that your surface function will accept
-    //     You may declare your own lighting model. See:
-    //     https://docs.unity3d.com/Manual/SL-SurfaceShaderLighting.html
-    //
-    //   'fullforwardshadows' allows us to provide support for shadows in a forward rendering context
-    #pragma surface surf Standard fullforwardshadows
-
-    // Use shader model 3.0 target, to get nicer looking lighting
-    //
-    // Most desktop
-    #pragma target 3.0
-
-    sampler2D _MainTex;
-
-    struct Input
+    Properties
     {
-      float2 uv_MainTex;
-    };
-
-    half _Glossiness;
-    half _Metallic;
-    fixed4 _Color;
-
-    // Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
-    // See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
-    // #pragma instancing_options assumeuniformscaling
-    UNITY_INSTANCING_BUFFER_START(Props)
-    // put more per-instance properties here
-    UNITY_INSTANCING_BUFFER_END(Props)
-
-    // This "surf" function is our "surface" shader.
-    //  This works similarly to how UE4's Material System or Unity's Shader1
-    void surf (Input IN, inout SurfaceOutputStandard o)
-    {
-      // Albedo comes from a texture tinted by color
-      fixed4 c = tex2D (_MainTex, IN.uv_MainTex) * _Color;
-      o.Albedo = c.rgb;
-      // Metallic and smoothness come from slider variables
-      o.Metallic = _Metallic;
-      o.Smoothness = _Glossiness;
-      o.Alpha = c.a;
+        _MainTex ("Texture", 2D) = "white" {}
+        _Outline ("Outline", Color) = ( 1, 1, 1, 1 )
+        _Debug ("Debug", Color) = ( 0, 0, 0, 1 )
+        _Other ("Other", Color) = ( 1, 1, 1, 1)
+        _Scale ("Scale", Range(-10, 100)) = 5
+        _DepthThreshold ("Depth threshold", Range(-100, 100)) = 0.2
     }
-    ENDCG
-  }
-  FallBack "Diffuse"
+    SubShader
+    {
+        Tags { "Queue" = "Transparent" "RenderType" = "Transparent" }
+		Blend SrcAlpha OneMinusSrcAlpha
+        LOD 100
+
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #include "UnityCG.cginc"
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float2 uv : TEXCOORD0;
+            };
+
+            struct v2f
+            {
+                float2 uv : TEXCOORD0;
+                float4 vertex : SV_POSITION;
+            };
+
+            sampler2D _MainTex;
+            float4 _MainTex_ST;
+
+            sampler2D _CameraDepthTexture;
+            sampler2D _LastCameraDepthTexture;
+            float4 _MainTex_TexelSize; // automatically tied to texture
+            float _Scale; 
+            float _DepthThreshold;
+            float4 _Outline;
+            float4 _Debug;
+            float4 _Other;
+
+            v2f vert (appdata v)
+            {
+                v2f o;
+                o.vertex = UnityObjectToClipPos(v.vertex);
+                o.uv = TRANSFORM_TEX(v.uv, _MainTex);
+                return o;
+            }
+
+            fixed4 frag (v2f i) : SV_Target
+            {
+                // taken from https://roystan.net/articles/outline-shader.html
+
+                // sample adjacent pixels and compare values
+                // if very different, draw edge
+                // using depth buffer
+                // sample in X shape
+
+                // alternatively incr by 1 as scale incr by 1
+                // can incr edge 1 px at a time
+                float halfScaleFloor = floor(_Scale * 0.5);
+                float halfScaleCeil = ceil(_Scale * 0.5);
+
+                float2 bottomLeftUV = i.uv - float2(_MainTex_TexelSize.x, _MainTex_TexelSize.y) * halfScaleFloor;
+                float2 topRightUV = i.uv + float2(_MainTex_TexelSize.x, _MainTex_TexelSize.y) * halfScaleCeil;
+                float2 bottomRightUV = i.uv + float2(_MainTex_TexelSize.x * halfScaleCeil, -_MainTex_TexelSize.y * halfScaleFloor);
+                float2 topLeftUV = i.uv + float2(-_MainTex_TexelSize.x * halfScaleFloor, _MainTex_TexelSize.y * halfScaleCeil);
+
+                // sample depth texture using UVs
+                // CALCULATE MY OWN DEPTH
+                float depth0 = tex2D(_CameraDepthTexture, bottomLeftUV).r;
+                float depth1 = tex2D(_CameraDepthTexture, topRightUV).r;
+                float depth2 = tex2D(_CameraDepthTexture, bottomRightUV).r;
+                float depth3 = tex2D(_CameraDepthTexture, topLeftUV).r;
+
+                float depthFiniteDifference0 = depth1 - depth0;
+                float depthFiniteDifference1 = depth3 - depth2;
+
+                // roberts cross algorithm
+                float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * _Scale;
+
+                // scale to distance from camera
+                float depthThreshold = _DepthThreshold * depth0;
+
+                edgeDepth = edgeDepth > depthThreshold ? 1 : 0;
+
+                return edgeDepth;
+
+                // scale to depth
+                float scaledEdgeDepth = _DepthThreshold * depth0;
+
+                edgeDepth = edgeDepth > scaledEdgeDepth ? 1 : -1; // clamp
+
+                // same process with normals
+
+                // put it all into a color
+                // float4 edgeColor = float4(_Color.rgb, _Color.a * edge);
+                fixed4 col;
+                if(edgeDepth > 0)
+                {
+                    // col = fixed4(_Outline.rgb, _Outline.a * edgeDepth);
+                    col = _Outline;
+                }
+                else if(edgeDepth < 0)
+                {
+                    col = tex2D(_MainTex, i.uv);
+                }
+                else
+                {
+                    col = _Debug;
+                }
+
+                float depth = tex2D(_CameraDepthTexture, i.uv).r;
+
+                if(depth > 0)
+                {
+                    col = _Outline;
+                }
+                else if(depth < 0)
+                {
+                    col = _Debug;
+                }
+                else
+                {
+                    col = _Other;
+                }
+
+                return col;               
+
+                // apply fog
+                UNITY_APPLY_FOG(i.fogCoord, col);
+
+                return col;
+            }
+            ENDCG
+        }
+    }
 }
 
