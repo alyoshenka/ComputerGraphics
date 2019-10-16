@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 
+[ExecuteInEditMode]
 public class FullscreenPostprocessing : MonoBehaviour
 {
     [SerializeField]
@@ -9,7 +10,7 @@ public class FullscreenPostprocessing : MonoBehaviour
     {
         Camera cam;
         cam = GetComponent<Camera>();
-        cam.depthTextureMode = cam.depthTextureMode | DepthTextureMode.Depth;
+        cam.depthTextureMode = cam.depthTextureMode | DepthTextureMode.DepthNormals;
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)

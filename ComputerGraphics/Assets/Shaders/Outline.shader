@@ -8,10 +8,9 @@ Shader "Custom/PostProcessing/Outline"
     {
         _MainTex ("Texture", 2D) = "white" {}
         _Outline ("Outline", Color) = ( 1, 1, 1, 1 )
-        _Debug ("Debug", Color) = ( 0, 0, 0, 1 )
-        _Other ("Other", Color) = ( 1, 1, 1, 1)
-        _Scale ("Scale", Range(-10, 100)) = 5
-        _DepthThreshold ("Depth threshold", Range(0, 1)) = 0.2
+        _Scale ("Scale", Range(0, 2)) = 0.1
+        _DepthThreshold ("Depth threshold", Range(0, 0.01)) = 0.005
+        _NormalThreshold("Normal threshold", Range(0, 3)) = 1
     }
     SubShader
     {
@@ -26,6 +25,7 @@ Shader "Custom/PostProcessing/Outline"
             #pragma fragment frag
 
             #include "UnityCG.cginc"
+            // https://github.com/TwoTailsGames/Unity-Built-in-Shaders/blob/master/CGIncludes/UnityCG.cginc
 
             struct appdata
             {
@@ -44,37 +44,24 @@ Shader "Custom/PostProcessing/Outline"
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
-            sampler2D _CameraDepthTexture;
-            sampler2D _CameraNormalsTexture;
+            sampler2D _CameraDepthNormalsTexture;
             float4 _MainTex_TexelSize; // automatically tied to texture
             float _Scale; 
             float _DepthThreshold;
+            float _NormalThreshold;
             float4 _Outline;
-            float4 _Debug;
-            float4 _Other;
 
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                // o.normal = mul(unity_ObjectToWorld, float4(v.normal, 0.0)).xyz; // https://forum.unity.com/threads/world-space-normal.58810/
                 o.normal = UnityObjectToWorldNormal(v.normal);
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
-                fixed4 c = 0;
-                c.rgb = i.normal * 0.5 + 0.5;
-                // return c;
-
-                fixed4 col = (i.normal.x, i.normal.y, i.normal.z, 1.0);
-                // return col;
-
-
-
-
                 // taken from https://roystan.net/articles/outline-shader.html
 
                 // sample adjacent pixels and compare values
@@ -84,6 +71,9 @@ Shader "Custom/PostProcessing/Outline"
 
                 // alternatively incr by 1 as scale incr by 1
                 // can incr edge 1 px at a time
+
+                // get all the values
+
                 float halfScaleFloor = floor(_Scale * 0.5);
                 float halfScaleCeil = ceil(_Scale * 0.5);
 
@@ -92,12 +82,18 @@ Shader "Custom/PostProcessing/Outline"
                 float2 bottomRightUV = i.uv + float2(_MainTex_TexelSize.x * halfScaleCeil, -_MainTex_TexelSize.y * halfScaleFloor);
                 float2 topLeftUV = i.uv + float2(-_MainTex_TexelSize.x * halfScaleFloor, _MainTex_TexelSize.y * halfScaleCeil);
 
-                // sample depth texture using UVs
-                // CALCULATE MY OWN DEPTH
-                float depth0 = tex2D(_CameraDepthTexture, bottomLeftUV).r;
-                float depth1 = tex2D(_CameraDepthTexture, topRightUV).r;
-                float depth2 = tex2D(_CameraDepthTexture, bottomRightUV).r;
-                float depth3 = tex2D(_CameraDepthTexture, topLeftUV).r;
+                float4 depthNormal0 = tex2D(_CameraDepthNormalsTexture, bottomLeftUV);
+                float4 depthNormal1 = tex2D(_CameraDepthNormalsTexture, topRightUV);
+                float4 depthNormal2 = tex2D(_CameraDepthNormalsTexture, bottomRightUV);
+                float4 depthNormal3 = tex2D(_CameraDepthNormalsTexture, topLeftUV);
+
+                float depth0, depth1, depth2, depth3;
+                float3 normal0, normal1, normal2, normal3;
+
+                DecodeDepthNormal(depthNormal0, depth0, normal0);
+                DecodeDepthNormal(depthNormal1, depth1, normal1);
+                DecodeDepthNormal(depthNormal2, depth2, normal2);
+                DecodeDepthNormal(depthNormal3, depth3, normal3);
 
                 float depthFiniteDifference0 = depth1 - depth0;
                 float depthFiniteDifference1 = depth3 - depth2;
@@ -110,15 +106,18 @@ Shader "Custom/PostProcessing/Outline"
 
                 edgeDepth = edgeDepth > scaledEdgeDepth ? 1 : 0;
 
-                return edgeDepth;
-
                 // same process with normals
                 // 'flat' angles will not be picked up using the scaled distance
 
-                float3 normal0 = tex2D(_CameraNormalsTexture, bottomLeftUV).rgb;
-                float3 normal1 = tex2D(_CameraNormalsTexture, topRightUV).rgb;
-                float3 normal2 = tex2D(_CameraNormalsTexture, bottomRightUV).rgb;
-                float3 normal3 = tex2D(_CameraNormalsTexture, topLeftUV).rgb;
+                float3 normalFiniteDifference0 = normal1 - normal0;
+                float3 normalFiniteDifference1 = normal3 - normal2;
+
+                float edgeNormal = sqrt(dot(normalFiniteDifference0, normalFiniteDifference0)
+                    + dot(normalFiniteDifference1, normalFiniteDifference1));
+                edgeNormal = edgeNormal > _NormalThreshold ? 1 : 0;
+
+                float edge = max(edgeDepth, edgeNormal);
+                return edge;
             }
             ENDCG
         }
