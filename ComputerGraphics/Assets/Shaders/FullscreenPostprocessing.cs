@@ -10,14 +10,11 @@ public class FullscreenPostprocessing : MonoBehaviour
     {
         Camera cam;
         cam = GetComponent<Camera>();
-        cam.depthTextureMode = cam.depthTextureMode | DepthTextureMode.DepthNormals;
+        cam.depthTextureMode = DepthTextureMode.DepthNormals;
     }
 
     private void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        // start fresh
-        GL.Clear(false, true, Color.clear, 0);
-
         Graphics.Blit(source, destination, postprocessMaterial);
     }
 }

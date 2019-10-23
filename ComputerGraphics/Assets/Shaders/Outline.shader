@@ -6,7 +6,7 @@ Shader "Custom/PostProcessing/Outline"
 {
     Properties
     {
-        _MainTex ("Texture", 2D) = "white" {}
+        [HideInInspector]_MainTex ("Texture", 2D) = "white" {}
         _Outline ("Outline", Color) = ( 1, 1, 1, 1 )
         _Scale ("Scale", Range(0, 2)) = 0.1
         _DepthThreshold ("Depth threshold", Range(0, 0.01)) = 0.005
@@ -117,7 +117,8 @@ Shader "Custom/PostProcessing/Outline"
                 edgeNormal = edgeNormal > _NormalThreshold ? 1 : 0;
 
                 float edge = max(edgeDepth, edgeNormal);
-                return edge;
+                
+                return edge == 1 ? edge : tex2D(_MainTex, i.uv);
             }
             ENDCG
         }
