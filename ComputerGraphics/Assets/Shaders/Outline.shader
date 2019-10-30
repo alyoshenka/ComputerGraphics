@@ -8,9 +8,9 @@ Shader "Custom/PostProcessing/Outline"
     {
         [HideInInspector]_MainTex ("Texture", 2D) = "white" {}
         _Outline ("Outline", Color) = ( 1, 1, 1, 1 )
-        _Scale ("Scale", Range(0, 2)) = 0.1
-        _DepthThreshold ("Depth threshold", Range(0, 0.01)) = 0.005
-        _NormalThreshold("Normal threshold", Range(0, 3)) = 1
+        _Scale ("Scale", Range(0, 0.05)) = 0.002
+        _DepthThreshold ("Depth threshold", Range(0, 0.0005)) = 0.00022
+        _NormalThreshold("Normal threshold", Range(0, 3)) = 0.63
     }
     SubShader
     {
@@ -38,7 +38,9 @@ Shader "Custom/PostProcessing/Outline"
             {
                 float2 uv : TEXCOORD0;
                 float4 vertex : SV_POSITION;
-                float3 normal : NORMAL;
+
+                float2 stereo : TEXCOORD1; // alphablend function
+                float3 viewSpaceDir : TEXCOORD2;
             };
 
             sampler2D _MainTex;
@@ -50,13 +52,16 @@ Shader "Custom/PostProcessing/Outline"
             float _DepthThreshold;
             float _NormalThreshold;
             float4 _Outline;
+            float4x4 _ClipToView;
 
             v2f vert (appdata v)
             {
                 v2f o;
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
-                o.normal = UnityObjectToWorldNormal(v.normal);
+
+                o.stereo = TransformStereoScreenSpaceTex(o.uv, 1.0);
+                o.viewSpaceDir = mul(_ClipToView, o.vertex).xyz;
                 return o;
             }
 
@@ -117,8 +122,23 @@ Shader "Custom/PostProcessing/Outline"
                 edgeNormal = edgeNormal > _NormalThreshold ? 1 : 0;
 
                 float edge = max(edgeDepth, edgeNormal);
+
+                // return edge == 1 ? edge : tex2D(_MainTex, i.uv);
+
+
+                // now we need to get rid of surface artifacts
+
+                // edges with angles similar to that of the camera view angle
+                // will be shaded because the distance between pixels
+                // falls within the threshold
+
+                // -> modulate depth threshold by surface normal
+
+                // to get camera direction in view space (same as given normals)
+                // multiply camera direction in clip space (given) by 
+                // inverse prijection matrix (clip to view)
                 
-                return edge == 1 ? edge : tex2D(_MainTex, i.uv);
+                return float4(i.viewSpaceDir, 1);
             }
             ENDCG
         }

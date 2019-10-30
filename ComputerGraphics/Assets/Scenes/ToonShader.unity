@@ -589,6 +589,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   postprocessMaterial: {fileID: 2100000, guid: 9c269cae58aa7854a9ef7f92faf830da, type: 2}
+  cam: {fileID: 1667985825}
 --- !u!1 &1737245141
 GameObject:
   m_ObjectHideFlags: 0
