@@ -11,6 +11,8 @@ Shader "Custom/PostProcessing/Outline"
         _Scale ("Scale", Range(0, 0.05)) = 0.002
         _DepthThreshold ("Depth threshold", Range(0, 0.0005)) = 0.00022
         _NormalThreshold("Normal threshold", Range(0, 3)) = 0.63
+        _DepthNormalThreshold ("Depth Normal Threshold", Float) = 0.5
+        _DepthNormalThresholdScale("Depth Normal Threshold Scale", Float) = 7
     }
     SubShader
     {
@@ -53,6 +55,8 @@ Shader "Custom/PostProcessing/Outline"
             float _NormalThreshold;
             float4 _Outline;
             float4x4 _ClipToView;
+            float _DepthNormalThreshold;
+            float _DepthNormalThresholdScale;
 
             v2f vert (appdata v)
             {
@@ -102,14 +106,21 @@ Shader "Custom/PostProcessing/Outline"
 
                 float depthFiniteDifference0 = depth1 - depth0;
                 float depthFiniteDifference1 = depth3 - depth2;
+                
+                // scale to distance from camera
+                // float scaledEdgeDepth = _DepthThreshold * depth0;
+                // edgeDepth = edgeDepth > scaledEdgeDepth ? 1 : 0;
+
+                // modulate depth threshold (see explanation below)
+                float3 viewNormal = normal0 * 2 - 1; // transform from 0 - 1 to -1 - 1
+                float NdotV = 1 - dot(viewNormal, -i.viewSpaceDir); // difference between view and vert normal
+                float normalThreshold01 = saturate((NdotV - _DepthNormalThreshold) / (1 - _DepthNormalThreshold)); // Mathf.InverseLerp(_DepthNormalsThreshold, 1, NdotV);
+                float normalThreshold = normalThreshold01 * _DepthNormalThresholdScale + 1; // transform to 1 - upper bound (__DepthNormalThresholdScale)
+                float depthThreshold = _DepthThreshold * depth0 * normalThreshold;
 
                 // roberts cross algorithm
                 float edgeDepth = sqrt(pow(depthFiniteDifference0, 2) + pow(depthFiniteDifference1, 2)) * _Scale;
-
-                // scale to distance from camera
-                float scaledEdgeDepth = _DepthThreshold * depth0;
-
-                edgeDepth = edgeDepth > scaledEdgeDepth ? 1 : 0;
+                edgeDepth = edgeDepth > depthThreshold ? 1 : 0;
 
                 // same process with normals
                 // 'flat' angles will not be picked up using the scaled distance
@@ -123,8 +134,9 @@ Shader "Custom/PostProcessing/Outline"
 
                 float edge = max(edgeDepth, edgeNormal);
 
-                // return edge == 1 ? edge : tex2D(_MainTex, i.uv);
-
+                float4 edgeColor = float4(_Outline.rgb, _Outline.a * edge);
+                float4 color = tex2D(_MainTex, i.uv);
+                return color * color.a + edgeColor * edgeColor.a;
 
                 // now we need to get rid of surface artifacts
 
@@ -138,7 +150,8 @@ Shader "Custom/PostProcessing/Outline"
                 // multiply camera direction in clip space (given) by 
                 // inverse prijection matrix (clip to view)
                 
-                return float4(i.viewSpaceDir, 1);
+                // debug viewSpaceDir
+                // return float4(i.viewSpaceDir, 1);
             }
             ENDCG
         }
